@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Movie</string>
+    <string name="main_screen_menu_highest_rating">Highest rating</string>
+    <string name="main_screen_menu_popularity">Popularity</string>
 </resources>
