@@ -5,10 +5,12 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import java.util.List;
 
@@ -18,35 +20,62 @@ import sk.udacity.podstreleny.palo.movie.viewModels.DashBoardViewModel;
 
 public class DashBoardActivity extends AppCompatActivity {
 
-    private static final int SPAN_COUNT = 2;
+    private final static int MULTIPLE_COLUMN = 2;
+
     private DashBoardViewModel viewModel;
+    private FrameLayout mProgressBar;
+    private RecyclerView recyclerView;
+    private int mResourceID;
+
+    private static final String RESOURCE_ID = "resource_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final MovieAdapter movieAdapter = new MovieAdapter();
-        final RecyclerView recyclerView = findViewById(R.id.main_rv);
+        final MovieAdapter adapter = new MovieAdapter(this);
+        recyclerView = findViewById(R.id.main_rv);
+        mProgressBar = findViewById(R.id.progress_bar);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(this,SPAN_COUNT));
-        recyclerView.setAdapter(movieAdapter);
+        final StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(MULTIPLE_COLUMN,RecyclerView.VERTICAL);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(this).get(DashBoardViewModel.class);
-        viewModel.setTopRatedMovies();
-
+        showProgressBar();
 
         viewModel.movies.observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
                 if(movies != null){
-                    movieAdapter.swapData(movies);
+                    adapter.swapData(movies);
+                    showRecyclerView();
                 }
             }
         });
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(RESOURCE_ID)) {
+            mResourceID = savedInstanceState.getInt(RESOURCE_ID);
+            if(mResourceID == R.id.pupularity){
+                viewModel.setPopularMovies();
+            }else {
+                viewModel.setTopRatedMovies();
+            }
+        }else{
+            viewModel.setPopularMovies();
+        }
     }
 
+    private void showRecyclerView(){
+        mProgressBar.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+    }
 
+    private void showProgressBar(){
+        mProgressBar.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,13 +87,27 @@ public class DashBoardActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.top_rating:
-                viewModel.setTopRatedMovies();
+                if(mResourceID != R.id.top_rating){
+                    showProgressBar();
+                    viewModel.setTopRatedMovies();
+                    mResourceID = R.id.top_rating;
+                }
                 return true;
             case R.id.pupularity:
-                viewModel.setPopularMovies();
+                if(mResourceID != R.id.pupularity){
+                    showProgressBar();
+                    viewModel.setPopularMovies();
+                    mResourceID = R.id.pupularity;
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(RESOURCE_ID,mResourceID);
+        super.onSaveInstanceState(outState);
     }
 }
