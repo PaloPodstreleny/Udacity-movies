@@ -12,15 +12,16 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import sk.udacity.podstreleny.palo.movie.model.Movie;
+import sk.udacity.podstreleny.palo.movie.model.MovieList;
 import sk.udacity.podstreleny.palo.movie.servicies.MovieService;
 
 public class DashBoardRepository {
 
     private static final String TAG = DashBoardRepository.class.toString();
-    private static final String BASE_MOVIEW_URL = "https://api.themoviedb.org/3/movie";
+    private static final String BASE_MOVIEW_URL = "https://api.themoviedb.org/";
 
-    private MutableLiveData<List<Movie>> topMovies = new MutableLiveData<>();
-
+    private MutableLiveData<List<Movie>> popularMovies = new MutableLiveData<>();
+    private MutableLiveData<List<Movie>> topRatedMovies = new MutableLiveData<>();
 
     private MovieService movieService;
 
@@ -37,30 +38,49 @@ public class DashBoardRepository {
                 .addConverterFactory(GsonConverterFactory.create());
     }
 
-    public LiveData<List<Movie>> getTopMovies() {
-        return  null;
-    }
+    public LiveData<List<Movie>> getTopRatedMovies() {
+        Call<MovieList> data = movieService.topRated();
 
-    public LiveData<List<Movie>> getPopularMovies() {
-        Call<List<Movie>> data = movieService.popular();
-
-        if (topMovies.getValue() != null && topMovies.getValue().isEmpty()) {
-            return topMovies;
+        if (topRatedMovies.getValue() != null && !topRatedMovies.getValue().isEmpty()) {
+            return topRatedMovies;
         } else {
 
-            data.enqueue(new Callback<List<Movie>>() {
+            data.enqueue(new Callback<MovieList>() {
                 @Override
-                public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
-                    topMovies.setValue(response.body());
+                public void onResponse(Call<MovieList> call, Response<MovieList> response) {
+                    topRatedMovies.setValue(response.body().getResults());
                 }
 
                 @Override
-                public void onFailure(Call<List<Movie>> call, Throwable t) {
+                public void onFailure(Call<MovieList> call, Throwable t) {
                     Log.e(TAG, "Problem with getting data!");
                 }
             });
 
-            return topMovies;
+            return topRatedMovies;
+        }
+    }
+
+    public LiveData<List<Movie>> getPopularMovies() {
+        Call<MovieList> data = movieService.popular();
+
+        if (popularMovies.getValue() != null && !popularMovies.getValue().isEmpty()) {
+            return popularMovies;
+        } else {
+
+            data.enqueue(new Callback<MovieList>() {
+                @Override
+                public void onResponse(Call<MovieList> call, Response<MovieList> response) {
+                    popularMovies.setValue(response.body().getResults());
+                }
+
+                @Override
+                public void onFailure(Call<MovieList> call, Throwable t) {
+                    Log.e(TAG, "Problem with getting data!");
+                }
+            });
+
+            return popularMovies;
         }
     }
 

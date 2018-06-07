@@ -5,14 +5,14 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import sk.udacity.podstreleny.palo.movie.ApiKey;
-import sk.udacity.podstreleny.palo.movie.model.Movie;
+import sk.udacity.podstreleny.palo.movie.model.MovieList;
 
 public interface MovieService {
 
-    @GET("/top_rated?"+ ApiKey.API_KEY)
-    Call<List<Movie>> topRated();
+    @GET("/3/movie/top_rated?api_key="+ ApiKey.API_KEY)
+    Call<MovieList> topRated();
 
-    @GET("/popular?"+ ApiKey.API_KEY)
-    Call<List<Movie>> popular();
+    @GET("/3/movie/popular?api_key="+ ApiKey.API_KEY)
+    Call<MovieList> popular();
 
 }

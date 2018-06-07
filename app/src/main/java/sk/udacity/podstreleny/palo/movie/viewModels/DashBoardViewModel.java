@@ -1,6 +1,9 @@
 package sk.udacity.podstreleny.palo.movie.viewModels;
 
+import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 
 import java.util.List;
@@ -10,26 +13,32 @@ import sk.udacity.podstreleny.palo.movie.repositories.DashBoardRepository;
 
 public class DashBoardViewModel extends ViewModel {
 
-    private DashBoardRepository mRepository;
-    private LiveData<List<Movie>> mTopRatingMovies;
-    private LiveData<List<Movie>> mMostPupularMovies;
+    private MutableLiveData<Boolean> isMoviewListingChanged = new MutableLiveData<>();
 
+    private DashBoardRepository mRepository;
+    public final LiveData<List<Movie>> movies = Transformations.
+            switchMap(isMoviewListingChanged, new Function<Boolean, LiveData<List<Movie>>>() {
+                @Override
+                public LiveData<List<Movie>> apply(Boolean input) {
+                    if(input){
+                        return mRepository.getTopRatedMovies();
+                    }else {
+                        return mRepository.getPopularMovies();
+                    }
+
+                }
+            });
 
     public DashBoardViewModel(){
         mRepository = new DashBoardRepository();
     }
 
-    public LiveData<List<Movie>> getTopRatingMovies(){
-        if(mTopRatingMovies == null){
-            mTopRatingMovies =  mRepository.getTopMovies();
-        }
-        return mTopRatingMovies;
+    public void setTopRatedMovies(){
+        isMoviewListingChanged.setValue(true);
     }
 
-    public LiveData<List<Movie>> getMostPupularMovies() {
-        if(mMostPupularMovies == null){
-            mMostPupularMovies =  mRepository.getPopularMovies();
-        }
-        return mMostPupularMovies;
+    public void setPopularMovies(){
+        isMoviewListingChanged.setValue(false);
     }
+
 }
