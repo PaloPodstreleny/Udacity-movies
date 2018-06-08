@@ -2,6 +2,7 @@ package sk.udacity.podstreleny.palo.movie.screens.dashboard;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +19,7 @@ import sk.udacity.podstreleny.palo.movie.R;
 import sk.udacity.podstreleny.palo.movie.model.Movie;
 import sk.udacity.podstreleny.palo.movie.viewModels.DashBoardViewModel;
 
-public class DashBoardActivity extends AppCompatActivity {
+public class DashBoardActivity extends AppCompatActivity implements MovieAdapter.MovieItemClickListener {
 
     private final static int MULTIPLE_COLUMN = 2;
 
@@ -34,7 +35,7 @@ public class DashBoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final MovieAdapter adapter = new MovieAdapter(this);
+        final MovieAdapter adapter = new MovieAdapter(this,this);
         recyclerView = findViewById(R.id.main_rv);
         mProgressBar = findViewById(R.id.progress_bar);
 
@@ -81,6 +82,11 @@ public class DashBoardActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.order_menu, menu);
         return true;
+    }
+
+    @Override
+    public void onClick(Movie moview) {
+        //Intent intent = new Intent(this,MovieDetail.class);
     }
 
     @Override

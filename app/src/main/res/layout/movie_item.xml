@@ -2,29 +2,29 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Dashboard.ListItemLayout"
-    android:background="?attr/selectableItemBackground"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/movie_photo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:layout_height="250dp"
+        />
 
     <TextView
         android:id="@+id/rating_tv"
         style="@style/Dashboard.RatingText"
-        tools:text="9.7"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:text="9.7" />
 
 
     <TextView
         android:id="@+id/movie_title"
+        style="@style/Dashboard.TitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Dashboard.TitleText"
         tools:text="Title of movie" />
 
 </FrameLayout>

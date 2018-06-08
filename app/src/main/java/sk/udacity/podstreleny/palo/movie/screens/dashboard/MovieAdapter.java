@@ -3,12 +3,12 @@ package sk.udacity.podstreleny.palo.movie.screens.dashboard;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -22,8 +22,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/";
     private List<Movie> movies;
     private Context context;
+    private MovieItemClickListener listener;
 
-    public MovieAdapter(Context context){
+    public MovieAdapter(Context context, MovieItemClickListener listener){
+        this.listener = listener;
         this.context = context;
     }
 
@@ -53,7 +55,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         notifyDataSetChanged();
     }
 
-    class MovieViewHolder extends RecyclerView.ViewHolder{
+    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView mTitleTextView;
         private ImageView mMovieImage;
@@ -64,6 +66,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             mTitleTextView = view.findViewById(R.id.movie_title);
             mMovieImage = view.findViewById(R.id.movie_photo);
             mRating = view.findViewById(R.id.rating_tv);
+            mMovieImage.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(context,"Palo", Toast.LENGTH_LONG).show();
         }
 
         public void bind(int position){
@@ -76,7 +84,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
     interface MovieItemClickListener{
-        void onClick(String id);
+        void onClick(Movie moview);
     }
 
 }

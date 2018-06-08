@@ -1,7 +1,5 @@
 package sk.udacity.podstreleny.palo.movie.servicies;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import sk.udacity.podstreleny.palo.movie.ApiKey;
