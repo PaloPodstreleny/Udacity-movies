@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".screens.dashboard.DashBoardActivity">
+    tools:context=".screen.dashboard.DashBoardActivity">
+
+    <include layout="@layout/app_bar" />
+
+    <TextView
+        android:id="@+id/actualOrdering"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Ordered by:"
+        style="@style/Dashboard.OrderByText"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/colorHorizontalLineGrey"
+        android:layout_height="1dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_rv"

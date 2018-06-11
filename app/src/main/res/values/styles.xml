@@ -1,12 +1,24 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorWhite</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionOverflowButtonStyle">@style/MenuButtonOverflow</item>
+        <item name="titleTextColor">@color/colorBlack</item>
+        <item name="homeAsUpIndicator">@color/colorBlack</item>
+        <item name="popupTheme">@style/CustomPopupTheme</item>
+    </style>
+
+
+    <style name="CustomPopupTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="android:popupBackground">@color/colorWhite</item>
+    </style>
+
+    <style name="CustomToolbar" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:homeAsUpIndicator">@color/colorBlack</item>
     </style>
     
     <style name="MenuButtonOverflow" parent="Base.Widget.AppCompat.ActionButton.Overflow">
@@ -20,7 +32,7 @@
 
     <style name="Dashboard.RatingText">
         <item name="android:layout_gravity">right|top</item>
-        <item name="android:background">@color/colorWhiteTransparent</item>
+        <item name="android:background">@color/colorWhite</item>
         <item name="android:padding">8dp</item>
         <item name="android:textColor">@color/colorBlackTransparent</item>
         <item name="android:textSize">16sp</item>
@@ -31,12 +43,19 @@
         <item name="android:layout_gravity">bottom</item>
         <item name="android:background">@color/colorBlackTransparent</item>
         <item name="android:padding">8dp</item>
-        <item name="android:textColor">@color/colorWhiteTransparent</item>
+        <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Dashboard.RecyclerView">
         <item name="android:background">@color/colorGreyBackground</item>
         <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="Dashboard.OrderByText">
+        <item name="android:padding">16dp</item>
+        <item name="android:gravity">right</item>
+        <item name="android:background">@color/colorWhite</item>
+        <item name="android:textColor">@color/colorBlack</item>
     </style>
 </resources>

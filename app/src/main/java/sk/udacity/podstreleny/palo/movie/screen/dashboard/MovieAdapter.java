@@ -1,4 +1,4 @@
-package sk.udacity.podstreleny.palo.movie.screens.dashboard;
+package sk.udacity.podstreleny.palo.movie.screen.dashboard;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -71,7 +70,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(context,"Palo", Toast.LENGTH_LONG).show();
+           listener.onClick(movies.get(getAdapterPosition()));
         }
 
         public void bind(int position){

@@ -1,4 +1,4 @@
-package sk.udacity.podstreleny.palo.movie.screens.dashboard;
+package sk.udacity.podstreleny.palo.movie.screen.dashboard;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -12,11 +12,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toolbar;
 
 import java.util.List;
 
 import sk.udacity.podstreleny.palo.movie.R;
 import sk.udacity.podstreleny.palo.movie.model.Movie;
+import sk.udacity.podstreleny.palo.movie.screen.movieDetail.MovieDetail;
 import sk.udacity.podstreleny.palo.movie.viewModels.DashBoardViewModel;
 
 public class DashBoardActivity extends AppCompatActivity implements MovieAdapter.MovieItemClickListener {
@@ -26,6 +29,7 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
     private DashBoardViewModel viewModel;
     private FrameLayout mProgressBar;
     private RecyclerView recyclerView;
+    private TextView mOrderingTv;
     private int mResourceID;
 
     private static final String RESOURCE_ID = "resource_id";
@@ -34,10 +38,13 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         final MovieAdapter adapter = new MovieAdapter(this,this);
         recyclerView = findViewById(R.id.main_rv);
         mProgressBar = findViewById(R.id.progress_bar);
+        mOrderingTv = findViewById(R.id.actualOrdering);
 
         final StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(MULTIPLE_COLUMN,RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(manager);
@@ -59,13 +66,27 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
         if(savedInstanceState != null && savedInstanceState.containsKey(RESOURCE_ID)) {
             mResourceID = savedInstanceState.getInt(RESOURCE_ID);
             if(mResourceID == R.id.pupularity){
+                setPopularTv();
                 viewModel.setPopularMovies();
             }else {
+                setTopRatedTv();
                 viewModel.setTopRatedMovies();
             }
         }else{
+            mResourceID = R.id.pupularity;
+            setPopularTv();
             viewModel.setPopularMovies();
         }
+    }
+
+    private void setPopularTv(){
+        final String arg = getString(R.string.main_screen_menu_popularity);
+        mOrderingTv.setText(getString(R.string.main_screen_order_text,arg));
+    }
+
+    private void setTopRatedTv(){
+        final String arg = getString(R.string.main_screen_menu_highest_rating);
+        mOrderingTv.setText(getString(R.string.main_screen_order_text,arg));
     }
 
     private void showRecyclerView(){
@@ -86,7 +107,8 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
 
     @Override
     public void onClick(Movie moview) {
-        //Intent intent = new Intent(this,MovieDetail.class);
+        Intent intent = new Intent(this,MovieDetail.class);
+        startActivity(intent);
     }
 
     @Override
@@ -96,6 +118,7 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
                 if(mResourceID != R.id.top_rating){
                     showProgressBar();
                     viewModel.setTopRatedMovies();
+                    setTopRatedTv();
                     mResourceID = R.id.top_rating;
                 }
                 return true;
@@ -103,6 +126,7 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
                 if(mResourceID != R.id.pupularity){
                     showProgressBar();
                     viewModel.setPopularMovies();
+                    setPopularTv();
                     mResourceID = R.id.pupularity;
                 }
                 return true;
