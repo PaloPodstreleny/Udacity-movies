@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".screen.dashboard.DashBoardActivity">
+        <activity android:name=".screen.dashboard.DashBoardActivity"
+            android:launchMode="singleTop"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,9 +24,10 @@
         <activity
             android:name=".screen.movieDetail.MovieDetail"
             android:parentActivityName=".screen.dashboard.DashBoardActivity">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".screen.dashboard.DashBoardActivity"></meta-data>
+                android:value=".screen.dashboard.DashBoardActivity" />
 
         </activity>
     </application>

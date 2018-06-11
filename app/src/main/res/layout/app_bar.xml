@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@color/colorWhite"
     style="@style/CustomToolbar"
+    android:theme="@style/CustomToolbar"
     >
 
 </android.support.v7.widget.Toolbar>

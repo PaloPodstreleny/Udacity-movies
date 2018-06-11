@@ -8,7 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionOverflowButtonStyle">@style/MenuButtonOverflow</item>
         <item name="titleTextColor">@color/colorBlack</item>
-        <item name="homeAsUpIndicator">@color/colorBlack</item>
         <item name="popupTheme">@style/CustomPopupTheme</item>
     </style>
 
@@ -18,14 +17,15 @@
     </style>
 
     <style name="CustomToolbar" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:homeAsUpIndicator">@color/colorBlack</item>
+        <item name="colorControlNormal">@color/colorBlack</item>
     </style>
-    
+
     <style name="MenuButtonOverflow" parent="Base.Widget.AppCompat.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_filter</item>
     </style>
 
     <style name="Dashboard"></style>
+
     <style name="Dashboard.ListItemLayout">
         <item name="android:layout_margin">4dp</item>
     </style>
@@ -57,5 +57,48 @@
         <item name="android:gravity">right</item>
         <item name="android:background">@color/colorWhite</item>
         <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
+
+    <style name="DetailMovie"></style>
+
+    <style name="DetailMovie.Title">
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="DetailMovie.Date">
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+
+    <style name="DetailMovie.AverageRating" parent="Dashboard.RatingText">
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+    </style>
+
+    <style name="DetailMovie.LinearLayout">
+        <item name="android:background">@color/colorWhite</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="DetailMovie.Image">
+        <item name="android:layout_marginTop">4dp</item>
+    </style>
+
+    <style name="DetailMovie.Description">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:layout_marginLeft">8dp</item>
     </style>
 </resources>

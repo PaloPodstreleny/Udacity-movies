@@ -13,32 +13,32 @@ import sk.udacity.podstreleny.palo.movie.repositories.DashBoardRepository;
 
 public class DashBoardViewModel extends ViewModel {
 
-    private MutableLiveData<Boolean> isMoviewListingChanged = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isMovieOrderChanged = new MutableLiveData<>();
 
     private DashBoardRepository mRepository;
     public final LiveData<List<Movie>> movies = Transformations.
-            switchMap(isMoviewListingChanged, new Function<Boolean, LiveData<List<Movie>>>() {
+            switchMap(isMovieOrderChanged, new Function<Boolean, LiveData<List<Movie>>>() {
                 @Override
                 public LiveData<List<Movie>> apply(Boolean input) {
-                    if(input){
+                    if (input) {
                         return mRepository.getTopRatedMovies();
-                    }else {
+                    } else {
                         return mRepository.getPopularMovies();
                     }
 
                 }
             });
 
-    public DashBoardViewModel(){
+    public DashBoardViewModel() {
         mRepository = new DashBoardRepository();
     }
 
-    public void setTopRatedMovies(){
-        isMoviewListingChanged.setValue(true);
+    public void setTopRatedMovies() {
+        isMovieOrderChanged.setValue(true);
     }
 
-    public void setPopularMovies(){
-        isMoviewListingChanged.setValue(false);
+    public void setPopularMovies() {
+        isMovieOrderChanged.setValue(false);
     }
 
 }

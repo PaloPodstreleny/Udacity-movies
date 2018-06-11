@@ -23,7 +23,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private Context context;
     private MovieItemClickListener listener;
 
-    public MovieAdapter(Context context, MovieItemClickListener listener){
+    public MovieAdapter(Context context, MovieItemClickListener listener) {
         this.listener = listener;
         this.context = context;
     }
@@ -31,7 +31,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_item, parent, false);
         return new MovieViewHolder(view);
     }
 
@@ -42,25 +42,25 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-        if(movies == null){
+        if (movies == null) {
             return 0;
-        }else {
+        } else {
             return movies.size();
         }
     }
 
-    public void swapData(List<Movie> movies){
+    public void swapData(List<Movie> movies) {
         this.movies = movies;
         notifyDataSetChanged();
     }
 
-    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mTitleTextView;
         private ImageView mMovieImage;
         private TextView mRating;
 
-        MovieViewHolder(View view){
+        MovieViewHolder(View view) {
             super(view);
             mTitleTextView = view.findViewById(R.id.movie_title);
             mMovieImage = view.findViewById(R.id.movie_photo);
@@ -70,20 +70,21 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         @Override
         public void onClick(View v) {
-           listener.onClick(movies.get(getAdapterPosition()));
+            listener.onClick(movies.get(getAdapterPosition()));
         }
 
-        public void bind(int position){
+        public void bind(int position) {
             Movie movie = movies.get(position);
             mTitleTextView.setText(movie.getTitle());
-            mRating.setText(movie.getVote_average().toString());
-            Glide.with(context).load(IMAGE_BASE_URL+movie.getPoster_path()).into(mMovieImage);
+            mRating.setText(String.valueOf(movie.getVote_average()));
+            Glide.with(context).load(IMAGE_BASE_URL + movie.getPoster_path())
+                    .into(mMovieImage);
 
         }
     }
 
-    interface MovieItemClickListener{
-        void onClick(Movie moview);
+    interface MovieItemClickListener {
+        void onClick(Movie movie);
     }
 
 }
