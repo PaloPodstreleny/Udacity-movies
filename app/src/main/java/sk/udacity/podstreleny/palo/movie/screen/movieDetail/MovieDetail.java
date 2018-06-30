@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
@@ -19,19 +17,19 @@ public class MovieDetail extends AppCompatActivity {
     private static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/";
 
     @BindView(R.id.movie_title)
-    private TextView movieTitle;
+    TextView movieTitle;
 
     @BindView(R.id.movie_overview)
-    private TextView movieOverview;
+    TextView movieOverview;
 
     @BindView(R.id.movie_image)
-    private ImageView moviePoster;
+    ImageView moviePoster;
 
     @BindView(R.id.movie_release_date)
-    private TextView movieReleaseDate;
+    TextView movieReleaseDate;
 
     @BindView(R.id.movie_rating)
-    private TextView movieRating;
+    TextView movieRating;
 
     @BindView(R.id.include)
     Toolbar toolbar;
@@ -40,6 +38,7 @@ public class MovieDetail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+        ButterKnife.bind(this);
 
         //Set toolbar
         setSupportActionBar(toolbar);
@@ -71,7 +70,6 @@ public class MovieDetail extends AppCompatActivity {
             }
         }
 
-        ButterKnife.bind(this);
 
     }
 

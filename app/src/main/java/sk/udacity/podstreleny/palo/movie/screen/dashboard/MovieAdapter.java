@@ -59,18 +59,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.movie_title)
-        private TextView mTitleTextView;
+        TextView mTitleTextView;
 
         @BindView(R.id.movie_photo)
-        private ImageView mMovieImage;
+        ImageView mMovieImage;
 
         @BindView(R.id.rating_tv)
-        private TextView mRating;
+        TextView mRating;
 
         MovieViewHolder(View view) {
             super(view);
+            ButterKnife.bind(this, view);
             mMovieImage.setOnClickListener(this);
-            ButterKnife.bind(this,view);
         }
 
         @Override

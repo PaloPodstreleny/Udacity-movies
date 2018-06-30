@@ -34,13 +34,13 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
     private DashBoardViewModel viewModel;
 
     @BindView(R.id.progress_bar)
-    private FrameLayout mProgressBar;
+    FrameLayout mProgressBar;
 
     @BindView(R.id.main_rv)
-    private RecyclerView recyclerView;
+    RecyclerView recyclerView;
 
     @BindView(R.id.actualOrdering)
-    private TextView mOrderingTv;
+    TextView mOrderingTv;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -49,6 +49,7 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
         final MovieAdapter adapter = new MovieAdapter(this, this);
@@ -82,7 +83,6 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
             setPopularTv();
         }
 
-        ButterKnife.bind(this);
     }
 
     private void setPopularTv() {
