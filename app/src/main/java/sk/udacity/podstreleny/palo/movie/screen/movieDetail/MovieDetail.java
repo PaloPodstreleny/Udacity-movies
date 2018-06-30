@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import butterknife.BindView;
 import sk.udacity.podstreleny.palo.movie.R;
 import sk.udacity.podstreleny.palo.movie.util.IntentStrings;
 
@@ -16,11 +17,23 @@ public class MovieDetail extends AppCompatActivity {
 
     private static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/";
 
+    @BindView(R.id.movie_title)
     private TextView movieTitle;
+
+    @BindView(R.id.movie_overview)
     private TextView movieOverview;
-    private TextView movieReleaseDate;
+
+    @BindView(R.id.movie_image)
     private ImageView moviePoster;
+
+    @BindView(R.id.movie_release_date)
+    private TextView movieReleaseDate;
+
+    @BindView(R.id.movie_rating)
     private TextView movieRating;
+
+    @BindView(R.id.include)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +41,6 @@ public class MovieDetail extends AppCompatActivity {
         setContentView(R.layout.activity_movie_detail);
 
         //Set toolbar
-        Toolbar toolbar = findViewById(R.id.include);
         setSupportActionBar(toolbar);
 
         if(getSupportActionBar() != null)
@@ -36,12 +48,8 @@ public class MovieDetail extends AppCompatActivity {
 
         setTitle(R.string.movie_detail_screen_title);
 
-        movieTitle = findViewById(R.id.movie_title);
-        movieOverview = findViewById(R.id.movie_overview);
-        moviePoster = findViewById(R.id.movie_image);
-        movieReleaseDate = findViewById(R.id.movie_release_date);
-        movieRating = findViewById(R.id.movie_rating);
 
+        //TODO change it later :)
         Intent intent = getIntent();
         if (intent != null){
             if(intent.hasExtra(IntentStrings.MOVIE_TITLE)){

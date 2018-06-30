@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
 import sk.udacity.podstreleny.palo.movie.model.Movie;
 import sk.udacity.podstreleny.palo.movie.screen.movieDetail.MovieDetail;
@@ -26,26 +28,30 @@ import sk.udacity.podstreleny.palo.movie.viewModels.DashBoardViewModel;
 public class DashBoardActivity extends AppCompatActivity implements MovieAdapter.MovieItemClickListener {
 
     private final static int MULTIPLE_COLUMN = 2;
-
-    private DashBoardViewModel viewModel;
-    private FrameLayout mProgressBar;
-    private RecyclerView recyclerView;
-    private TextView mOrderingTv;
+    private static final String RESOURCE_ID = "resource_id";
     private int mResourceID;
 
-    private static final String RESOURCE_ID = "resource_id";
+    private DashBoardViewModel viewModel;
+
+    @BindView(R.id.progress_bar)
+    private FrameLayout mProgressBar;
+
+    @BindView(R.id.main_rv)
+    private RecyclerView recyclerView;
+
+    @BindView(R.id.actualOrdering)
+    private TextView mOrderingTv;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         final MovieAdapter adapter = new MovieAdapter(this, this);
-        recyclerView = findViewById(R.id.main_rv);
-        mProgressBar = findViewById(R.id.progress_bar);
-        mOrderingTv = findViewById(R.id.actualOrdering);
 
         final StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(MULTIPLE_COLUMN, RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(manager);
@@ -75,6 +81,8 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
             mResourceID = R.id.pupularity;
             setPopularTv();
         }
+
+        ButterKnife.bind(this);
     }
 
     private void setPopularTv() {
