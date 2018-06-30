@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
 import sk.udacity.podstreleny.palo.movie.util.IntentStrings;
 
@@ -69,6 +70,8 @@ public class MovieDetail extends AppCompatActivity {
                 movieRating.setText(String.valueOf(value));
             }
         }
+
+        ButterKnife.bind(this);
 
     }
 

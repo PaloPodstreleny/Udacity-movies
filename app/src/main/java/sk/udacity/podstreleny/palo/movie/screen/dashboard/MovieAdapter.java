@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
 import sk.udacity.podstreleny.palo.movie.model.Movie;
 
@@ -56,16 +58,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        @BindView(R.id.movie_title)
         private TextView mTitleTextView;
+
+        @BindView(R.id.movie_photo)
         private ImageView mMovieImage;
+
+        @BindView(R.id.rating_tv)
         private TextView mRating;
 
         MovieViewHolder(View view) {
             super(view);
-            mTitleTextView = view.findViewById(R.id.movie_title);
-            mMovieImage = view.findViewById(R.id.movie_photo);
-            mRating = view.findViewById(R.id.rating_tv);
             mMovieImage.setOnClickListener(this);
+            ButterKnife.bind(this,view);
         }
 
         @Override
