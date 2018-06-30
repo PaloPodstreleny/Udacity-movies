@@ -20,6 +20,8 @@ public class DashBoardRepository {
 
     private MutableLiveData<List<Movie>> popularMovies = new MutableLiveData<>();
     private MutableLiveData<List<Movie>> topRatedMovies = new MutableLiveData<>();
+
+
     private MovieService movieService;
 
     public DashBoardRepository() {
@@ -78,6 +80,11 @@ public class DashBoardRepository {
 
             return popularMovies;
         }
+    }
+
+    public LiveData<List<Movie>> getFavouriteMovies(){
+        //TODO add functionality
+        return  null;
     }
 
 }
