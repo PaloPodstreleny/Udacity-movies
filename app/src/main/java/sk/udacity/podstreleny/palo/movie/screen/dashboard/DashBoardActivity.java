@@ -6,21 +6,21 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
 import sk.udacity.podstreleny.palo.movie.model.Movie;
+import sk.udacity.podstreleny.palo.movie.model.MovieListResponse;
 import sk.udacity.podstreleny.palo.movie.screen.movieDetail.MovieDetail;
 import sk.udacity.podstreleny.palo.movie.util.IntentStrings;
 import sk.udacity.podstreleny.palo.movie.viewModels.DashBoardViewModel;
@@ -33,17 +33,13 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
 
     private DashBoardViewModel viewModel;
 
-    @BindView(R.id.progress_bar)
-    FrameLayout mProgressBar;
-
-    @BindView(R.id.main_rv)
-    RecyclerView recyclerView;
-
-    @BindView(R.id.actualOrdering)
-    TextView mOrderingTv;
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    @BindView(R.id.progress_bar) ProgressBar mProgressBar;
+    @BindView(R.id.main_rv) RecyclerView recyclerView;
+    @BindView(R.id.actualOrdering) TextView mOrderingTv;
+    @BindView(R.id.top_bar) Toolbar toolbar;
+    @BindView(R.id.retry_btn) Button mRetryButton;
+    @BindView(R.id.problem_internet_tv) TextView mInternetProblemTv;
+    @BindView(R.id.problem_unauthorized_tv) TextView mUnAuthorizedProblemTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,35 +50,96 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
 
         final MovieAdapter adapter = new MovieAdapter(this, this);
 
-        final StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(MULTIPLE_COLUMN, RecyclerView.VERTICAL);
+        final GridLayoutManager manager = new GridLayoutManager(this,MULTIPLE_COLUMN);
         recyclerView.setLayoutManager(manager);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(this).get(DashBoardViewModel.class);
         showProgressBar();
 
-        viewModel.movies.observe(this, new Observer<List<Movie>>() {
+        viewModel.movies.observe(this, new Observer<MovieListResponse>() {
             @Override
-            public void onChanged(@Nullable List<Movie> movies) {
+            public void onChanged(@Nullable MovieListResponse movies) {
                 if (movies != null) {
-                    adapter.swapData(movies);
+                    switch (movies.getResponse()){
+                        case SUCCESSFUL:
+                            adapter.swapData(movies.getData());
+                            showRecyclerView();
+                            hideProgressBar();
+                            hideInternetConnectionProblem();
+                            hideUnAuthorizedError();
+                            break;
+                        case NO_INTERNET_CONNECTION:
+                            adapter.swapData(movies.getData());
+                            hideRecyclerView();
+                            hideProgressBar();
+                            showInterneConnectionProblem();
+                            hideUnAuthorizedError();
+                            break;
+                        case UNAUTHORIZED:
+                            adapter.swapData(movies.getData());
+                            hideRecyclerView();
+                            hideProgressBar();
+                            hideInternetConnectionProblem();
+                            showUnAuthorizedError();
+                            break;
+                        case UNKNOWN:
+                        default:
+                            hideRecyclerView();
+                            showProgressBar();
+                            hideInternetConnectionProblem();
+                            hideUnAuthorizedError();
+                    }
                     showRecyclerView();
                 }
             }
         });
 
+        mRetryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideInternetConnectionProblem();
+                hideRecyclerView();
+                showProgressBar();
+                retryRequest(mResourceID);
+            }
+        });
+
         if (savedInstanceState != null && savedInstanceState.containsKey(RESOURCE_ID)) {
             mResourceID = savedInstanceState.getInt(RESOURCE_ID);
-            if (mResourceID == R.id.pupularity) {
-                setPopularTv();
-            } else {
-                setTopRatedTv();
+            switch (mResourceID){
+                default:
+                case R.id.pupularity:
+                    setPopularTv();
+                    break;
+                case R.id.top_rating:
+                    setTopRatedTv();
+                    break;
+                case R.id.favorite:
+                    setFavoriteTv();
+                    break;
             }
         } else {
             mResourceID = R.id.pupularity;
             setPopularTv();
         }
 
+    }
+
+    private void retryRequest(int resourceID){
+        switch (resourceID) {
+            default:
+            case R.id.pupularity:
+                viewModel.setPopularMovies();
+                break;
+            case R.id.top_rating:
+                viewModel.setTopRatedMovies();
+                break;
+            case R.id.favorite:
+                viewModel.setFavoriteMovies();
+                break;
+        }
     }
 
     private void setPopularTv() {
@@ -97,14 +154,44 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
         viewModel.setTopRatedMovies();
     }
 
+    private void setFavoriteTv(){
+        final String arg = getString(R.string.main_screen_menu_favorite);
+        mOrderingTv.setText(getString(R.string.main_screen_order_text,arg));
+        viewModel.setFavoriteMovies();
+    }
+
     private void showRecyclerView() {
-        mProgressBar.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideRecyclerView(){
+        recyclerView.setVisibility(View.GONE);
     }
 
     private void showProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
+    }
+
+    private void hideProgressBar(){
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    private void showUnAuthorizedError(){
+        mUnAuthorizedProblemTv.setVisibility(View.VISIBLE);
+    }
+
+    private void hideUnAuthorizedError(){
+        mUnAuthorizedProblemTv.setVisibility(View.GONE);
+    }
+
+    private void showInterneConnectionProblem(){
+        mRetryButton.setVisibility(View.VISIBLE);
+        mInternetProblemTv.setVisibility(View.VISIBLE);
+    }
+
+    private void hideInternetConnectionProblem(){
+        mRetryButton.setVisibility(View.GONE);
+        mInternetProblemTv.setVisibility(View.GONE);
     }
 
     @Override
