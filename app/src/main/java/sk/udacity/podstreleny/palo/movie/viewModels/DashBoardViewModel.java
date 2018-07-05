@@ -1,10 +1,14 @@
 package sk.udacity.podstreleny.palo.movie.viewModels;
 
+import android.app.Application;
 import android.arch.core.util.Function;
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.content.Context;
 import android.util.Log;
 
 import java.util.List;
@@ -16,6 +20,7 @@ import sk.udacity.podstreleny.palo.movie.model.RetrofitResponse;
 import sk.udacity.podstreleny.palo.movie.repositories.DashBoardRepository;
 import sk.udacity.podstreleny.palo.movie.screen.dashboard.DashBoardActivity;
 
+import static sk.udacity.podstreleny.palo.movie.model.MovieOrder.POPULARITY;
 import static sk.udacity.podstreleny.palo.movie.model.MovieOrder.TOP_RATED;
 import static sk.udacity.podstreleny.palo.movie.model.MovieOrder.UNKNOWN;
 
@@ -44,9 +49,9 @@ public class DashBoardViewModel extends ViewModel {
             });
 
 
-    //TODO use injection
-    public DashBoardViewModel() {
-        mRepository = new DashBoardRepository();
+
+    public DashBoardViewModel(Application context) {
+        mRepository = new DashBoardRepository(context);
     }
 
     public void setTopRatedMovies() {
@@ -54,7 +59,7 @@ public class DashBoardViewModel extends ViewModel {
     }
 
     public void setPopularMovies() {
-        isMovieOrderChanged.setValue(MovieOrder.POPULARITY);
+        isMovieOrderChanged.setValue(POPULARITY);
     }
 
     public void setFavoriteMovies(){

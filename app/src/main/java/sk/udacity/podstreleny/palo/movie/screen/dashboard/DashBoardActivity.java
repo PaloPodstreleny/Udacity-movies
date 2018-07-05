@@ -24,6 +24,7 @@ import sk.udacity.podstreleny.palo.movie.model.MovieListResponse;
 import sk.udacity.podstreleny.palo.movie.screen.movieDetail.MovieDetail;
 import sk.udacity.podstreleny.palo.movie.util.IntentStrings;
 import sk.udacity.podstreleny.palo.movie.viewModels.DashBoardViewModel;
+import sk.udacity.podstreleny.palo.movie.viewModels.DashBoardViewModelFactory;
 
 public class DashBoardActivity extends AppCompatActivity implements MovieAdapter.MovieItemClickListener {
 
@@ -55,7 +56,8 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
-        viewModel = ViewModelProviders.of(this).get(DashBoardViewModel.class);
+        DashBoardViewModelFactory factory = new DashBoardViewModelFactory(getApplication());
+        viewModel = ViewModelProviders.of(this,factory).get(DashBoardViewModel.class);
         showProgressBar();
 
         viewModel.movies.observe(this, new Observer<MovieListResponse>() {

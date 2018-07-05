@@ -17,4 +17,7 @@ public abstract class RetrofitResponse<T> {
     public T getData() {
         return data;
     }
+
+
+
 }
