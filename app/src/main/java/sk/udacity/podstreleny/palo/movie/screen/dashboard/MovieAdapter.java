@@ -1,6 +1,7 @@
 package sk.udacity.podstreleny.palo.movie.screen.dashboard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,16 +18,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
 import sk.udacity.podstreleny.palo.movie.model.Movie;
+import sk.udacity.podstreleny.palo.movie.screen.movieDetail.MovieDetail;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     private static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/";
     private List<Movie> movies;
     private Context context;
-    private MovieItemClickListener listener;
 
-    public MovieAdapter(Context context, MovieItemClickListener listener) {
-        this.listener = listener;
+    public MovieAdapter(Context context) {
         this.context = context;
     }
 
@@ -75,7 +75,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         @Override
         public void onClick(View v) {
-            listener.onClick(movies.get(getAdapterPosition()));
+            Intent intent = new Intent(context, MovieDetail.class);
+            intent.putExtra(Intent.EXTRA_TEXT,movies.get(getAdapterPosition()));
+            context.startActivity(intent);
         }
 
         public void bind(int position) {
@@ -86,10 +88,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                     .into(mMovieImage);
 
         }
-    }
-
-    interface MovieItemClickListener {
-        void onClick(Movie movie);
     }
 
 }

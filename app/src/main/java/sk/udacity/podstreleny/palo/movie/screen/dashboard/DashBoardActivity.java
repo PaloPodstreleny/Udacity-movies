@@ -2,7 +2,6 @@ package sk.udacity.podstreleny.palo.movie.screen.dashboard;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,14 +18,11 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
-import sk.udacity.podstreleny.palo.movie.model.Movie;
 import sk.udacity.podstreleny.palo.movie.model.MovieListResponse;
-import sk.udacity.podstreleny.palo.movie.screen.movieDetail.MovieDetail;
-import sk.udacity.podstreleny.palo.movie.util.IntentStrings;
 import sk.udacity.podstreleny.palo.movie.viewModels.DashBoardViewModel;
 import sk.udacity.podstreleny.palo.movie.viewModels.DashBoardViewModelFactory;
 
-public class DashBoardActivity extends AppCompatActivity implements MovieAdapter.MovieItemClickListener {
+public class DashBoardActivity extends AppCompatActivity {
 
     private final static int MULTIPLE_COLUMN = 2;
     private static final String RESOURCE_ID = "resource_id";
@@ -49,7 +45,7 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        final MovieAdapter adapter = new MovieAdapter(this, this);
+        final MovieAdapter adapter = new MovieAdapter(this);
 
         final GridLayoutManager manager = new GridLayoutManager(this,MULTIPLE_COLUMN);
         recyclerView.setLayoutManager(manager);
@@ -202,18 +198,6 @@ public class DashBoardActivity extends AppCompatActivity implements MovieAdapter
         return true;
     }
 
-    @Override
-    public void onClick(Movie movie) {
-        Intent intent = new Intent(this, MovieDetail.class);
-
-        intent.putExtra(IntentStrings.MOVIE_TITLE, movie.getTitle());
-        intent.putExtra(IntentStrings.MOVIE_OVERVIEW, movie.getOverview());
-        intent.putExtra(IntentStrings.MOVIE_POSTER, movie.getPoster_path());
-        intent.putExtra(IntentStrings.MOVIE_RELEASE_DATE, movie.getRelease_date());
-        intent.putExtra(IntentStrings.MOVIE_VOTE_AVERAGE, movie.getVote_average());
-
-        startActivity(intent);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

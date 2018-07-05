@@ -1,14 +1,17 @@
 package sk.udacity.podstreleny.palo.movie.model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 @Entity(tableName = "movies",
         indices = {
                 @Index("popularity"),
                 @Index("vote_average")})
-public class Movie {
+public class Movie implements Parcelable {
 
     @PrimaryKey
     private int id;
@@ -20,6 +23,53 @@ public class Movie {
     private Float popularity;
     private String overview;
     private boolean favorite = false;
+
+    public Movie(){
+    }
+
+    @Ignore
+    protected Movie(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        poster_path = in.readString();
+        release_date = in.readString();
+        vote_average = in.readFloat();
+        popularity = in.readFloat();
+        overview = in.readString();
+        favorite = in.readByte() != 0;
+    }
+
+    @Ignore
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    @Ignore
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Ignore
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(poster_path);
+        dest.writeString(release_date);
+        dest.writeFloat(vote_average);
+        dest.writeFloat(popularity);
+        dest.writeString(overview);
+        dest.writeByte((byte) (favorite ? 1 : 0));
+    }
 
     public String getRelease_date() {
         return release_date;

@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
-import sk.udacity.podstreleny.palo.movie.util.IntentStrings;
+import sk.udacity.podstreleny.palo.movie.model.Movie;
 
 public class MovieDetail extends AppCompatActivity {
 
@@ -49,25 +49,14 @@ public class MovieDetail extends AppCompatActivity {
         setTitle(R.string.movie_detail_screen_title);
 
 
-        //TODO change it later :)
         Intent intent = getIntent();
-        if (intent != null){
-            if(intent.hasExtra(IntentStrings.MOVIE_TITLE)){
-                movieTitle.setText(intent.getStringExtra(IntentStrings.MOVIE_TITLE));
-            }
-            if(intent.hasExtra(IntentStrings.MOVIE_OVERVIEW)){
-                movieOverview.setText(intent.getStringExtra(IntentStrings.MOVIE_OVERVIEW));
-            }
-            if(intent.hasExtra(IntentStrings.MOVIE_POSTER)){
-                Glide.with(this).load(IMAGE_BASE_URL + intent.getStringExtra(IntentStrings.MOVIE_POSTER)).into(moviePoster);
-            }
-            if (intent.hasExtra(IntentStrings.MOVIE_RELEASE_DATE)){
-                movieReleaseDate.setText(intent.getStringExtra(IntentStrings.MOVIE_RELEASE_DATE).replace("-","/"));
-            }
-            if (intent.hasExtra(IntentStrings.MOVIE_VOTE_AVERAGE)){
-                final float value = intent.getFloatExtra(IntentStrings.MOVIE_VOTE_AVERAGE,0.0f);
-                movieRating.setText(String.valueOf(value));
-            }
+        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)){
+            Movie movie = intent.getParcelableExtra(Intent.EXTRA_TEXT);
+            movieTitle.setText(movie.getTitle());
+            movieOverview.setText(movie.getOverview());
+            Glide.with(this).load(IMAGE_BASE_URL + movie.getPoster_path()).into(moviePoster);
+            movieReleaseDate.setText(movie.getRelease_date().replace("-","/"));
+            movieRating.setText(String.valueOf(movie.getVote_average()));
         }
 
 
