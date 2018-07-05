@@ -31,7 +31,7 @@
     </style>
 
     <style name="Dashboard.RatingText">
-        <item name="android:layout_gravity">right|top</item>
+        <!--<item name="android:layout_gravity">right|top</item>-->
         <item name="android:background">@color/colorWhite</item>
         <item name="android:padding">8dp</item>
         <item name="android:textColor">@color/colorBlackTransparent</item>
@@ -40,7 +40,6 @@
     </style>
 
     <style name="Dashboard.TitleText">
-        <item name="android:layout_gravity">bottom</item>
         <item name="android:background">@color/colorBlackTransparent</item>
         <item name="android:padding">8dp</item>
         <item name="android:textColor">@color/colorWhite</item>

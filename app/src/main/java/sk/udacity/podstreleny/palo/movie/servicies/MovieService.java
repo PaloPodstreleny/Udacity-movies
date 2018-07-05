@@ -7,10 +7,10 @@ import sk.udacity.podstreleny.palo.movie.model.MovieList;
 
 public interface MovieService {
 
-    @GET("/3/movie/top_rated?api_key="+ ApiKey.API_KEY)
+    @GET("3/movie/top_rated?api_key="+ ApiKey.API_KEY)
     Call<MovieList> topRated();
 
-    @GET("/3/movie/popular?api_key="+ ApiKey.API_KEY)
+    @GET("3/movie/popular?api_key="+ ApiKey.API_KEY)
     Call<MovieList> popular();
 
 }
