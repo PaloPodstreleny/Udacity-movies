@@ -19,10 +19,10 @@ import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
 import sk.udacity.podstreleny.palo.movie.db.entity.Movie;
 import sk.udacity.podstreleny.palo.movie.screen.movieDetail.MovieDetail;
+import sk.udacity.podstreleny.palo.movie.util.MovieUrlUtil;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
-    private static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/";
     private List<Movie> movies;
     private Context context;
 
@@ -84,7 +84,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             Movie movie = movies.get(position);
             mTitleTextView.setText(movie.getTitle());
             mRating.setText(String.valueOf(movie.getVote_average()));
-            Glide.with(context).load(IMAGE_BASE_URL + movie.getPoster_path())
+            Glide.with(context).load(MovieUrlUtil.IMAGE_BASE_URL + movie.getPoster_path())
                     .into(mMovieImage);
 
         }

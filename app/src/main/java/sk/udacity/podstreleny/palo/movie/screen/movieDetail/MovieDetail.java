@@ -11,10 +11,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
 import sk.udacity.podstreleny.palo.movie.db.entity.Movie;
+import sk.udacity.podstreleny.palo.movie.util.MovieUrlUtil;
 
 public class MovieDetail extends AppCompatActivity {
-
-    private static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/";
 
     @BindView(R.id.movie_title)
     TextView movieTitle;
@@ -54,7 +53,7 @@ public class MovieDetail extends AppCompatActivity {
             Movie movie = intent.getParcelableExtra(Intent.EXTRA_TEXT);
             movieTitle.setText(movie.getTitle());
             movieOverview.setText(movie.getOverview());
-            Glide.with(this).load(IMAGE_BASE_URL + movie.getPoster_path()).into(moviePoster);
+            Glide.with(this).load(MovieUrlUtil.IMAGE_BASE_URL + movie.getPoster_path()).into(moviePoster);
             movieReleaseDate.setText(movie.getRelease_date().replace("-","/"));
             movieRating.setText(String.valueOf(movie.getVote_average()));
         }
