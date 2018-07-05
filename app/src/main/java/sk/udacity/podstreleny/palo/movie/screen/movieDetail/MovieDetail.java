@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
-import sk.udacity.podstreleny.palo.movie.model.Movie;
+import sk.udacity.podstreleny.palo.movie.db.entity.Movie;
 
 public class MovieDetail extends AppCompatActivity {
 

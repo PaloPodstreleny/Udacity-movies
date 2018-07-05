@@ -1,4 +1,4 @@
-package sk.udacity.podstreleny.palo.movie.model;
+package sk.udacity.podstreleny.palo.movie.db.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;

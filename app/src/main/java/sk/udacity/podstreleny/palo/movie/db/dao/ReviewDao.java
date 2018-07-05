@@ -7,7 +7,7 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import sk.udacity.podstreleny.palo.movie.model.Review;
+import sk.udacity.podstreleny.palo.movie.db.entity.Review;
 
 @Dao
 public interface ReviewDao {

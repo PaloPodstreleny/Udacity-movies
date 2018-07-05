@@ -8,7 +8,7 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import sk.udacity.podstreleny.palo.movie.model.Movie;
+import sk.udacity.podstreleny.palo.movie.db.entity.Movie;
 
 @Dao
 public interface MovieDao {

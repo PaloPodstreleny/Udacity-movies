@@ -7,7 +7,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
 import java.util.List;
-import sk.udacity.podstreleny.palo.movie.model.Video;
+import sk.udacity.podstreleny.palo.movie.db.entity.Video;
 
 @Dao
 public interface VideoDao {

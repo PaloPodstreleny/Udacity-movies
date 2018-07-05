@@ -17,7 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
-import sk.udacity.podstreleny.palo.movie.model.Movie;
+import sk.udacity.podstreleny.palo.movie.db.entity.Movie;
 import sk.udacity.podstreleny.palo.movie.screen.movieDetail.MovieDetail;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {

@@ -8,9 +8,9 @@ import android.arch.persistence.room.RoomDatabase;
 import sk.udacity.podstreleny.palo.movie.db.dao.MovieDao;
 import sk.udacity.podstreleny.palo.movie.db.dao.ReviewDao;
 import sk.udacity.podstreleny.palo.movie.db.dao.VideoDao;
-import sk.udacity.podstreleny.palo.movie.model.Movie;
-import sk.udacity.podstreleny.palo.movie.model.Review;
-import sk.udacity.podstreleny.palo.movie.model.Video;
+import sk.udacity.podstreleny.palo.movie.db.entity.Movie;
+import sk.udacity.podstreleny.palo.movie.db.entity.Review;
+import sk.udacity.podstreleny.palo.movie.db.entity.Video;
 
 @Database(entities = {Movie.class, Review.class, Video.class}, version = 1,exportSchema = false)
 public abstract class MovieDatabase extends RoomDatabase{
