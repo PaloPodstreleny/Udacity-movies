@@ -37,8 +37,10 @@
         tools:text="Title of movie" />
 
     <ImageView
+        android:id="@+id/starImage"
         android:layout_width="39dp"
         android:layout_height="39dp"
+        android:visibility="gone"
         android:src="@drawable/ic_star_border_yellow_36dp"
         android:background="@color/colorWhite"
         app:layout_constraintTop_toBottomOf="@id/rating_tv"

@@ -67,6 +67,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         @BindView(R.id.rating_tv)
         TextView mRating;
 
+        @BindView(R.id.starImage)
+        ImageView mStar;
+
         MovieViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
@@ -86,6 +89,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             mRating.setText(String.valueOf(movie.getVote_average()));
             Glide.with(context).load(MovieUrlUtil.IMAGE_BASE_URL + movie.getPoster_path())
                     .into(mMovieImage);
+            if(movie.isFavorite()) {
+                mStar.setImageResource(R.drawable.ic_star_yellow_36dp);
+            }else {
+                mStar.setVisibility(View.GONE);
+            }
 
         }
     }
