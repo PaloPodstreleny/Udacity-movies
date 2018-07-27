@@ -8,8 +8,11 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.util.Log;
 
-import sk.udacity.podstreleny.palo.movie.model.MovieListResponse;
+import java.util.List;
+
+import sk.udacity.podstreleny.palo.movie.db.entity.Movie;
 import sk.udacity.podstreleny.palo.movie.model.MovieOrder;
+import sk.udacity.podstreleny.palo.movie.model.Resource;
 import sk.udacity.podstreleny.palo.movie.repositories.DashBoardRepository;
 import sk.udacity.podstreleny.palo.movie.screen.dashboard.DashBoardActivity;
 
@@ -23,12 +26,12 @@ public class DashBoardViewModel extends ViewModel {
 
     private DashBoardRepository mRepository;
 
-    public final LiveData<MovieListResponse> movies = Transformations.switchMap(isMovieOrderChanged, new Function<MovieOrder, LiveData<MovieListResponse>>() {
+    public final LiveData<Resource<List<Movie>>> movies = Transformations.switchMap(isMovieOrderChanged, new Function<MovieOrder, LiveData<Resource<List<Movie>>>>() {
                 @Override
-                public LiveData<MovieListResponse> apply(MovieOrder input) {
+                public LiveData<Resource<List<Movie>>> apply(MovieOrder input) {
                     switch (input) {
                         case TOP_RATED:
-                            return mRepository.getTopRatedMovies();
+                            return mRepository.getTopRateMovies();
                         case POPULARITY:
                             return mRepository.getPopularMovies();
                         case FAVORITE:
@@ -43,7 +46,7 @@ public class DashBoardViewModel extends ViewModel {
 
 
     public DashBoardViewModel(Application context) {
-        mRepository = new DashBoardRepository(context);
+        mRepository = DashBoardRepository.getInstance(context);
     }
 
     public void setTopRatedMovies() {

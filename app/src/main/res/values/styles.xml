@@ -40,7 +40,6 @@
     </style>
 
     <style name="Dashboard.TitleText">
-        <item name="android:background">@color/colorBlackTransparent</item>
         <item name="android:padding">8dp</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textSize">16sp</item>

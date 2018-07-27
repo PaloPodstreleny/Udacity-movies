@@ -40,7 +40,6 @@
         android:id="@+id/progress_bar"
         android:layout_width="@dimen/progressBar"
         android:layout_height="@dimen/progressBar"
-        android:layout_gravity="center"
         app:layout_constraintTop_toBottomOf="@id/actualOrdering"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

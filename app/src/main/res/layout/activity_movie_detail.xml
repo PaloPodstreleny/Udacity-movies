@@ -17,7 +17,7 @@
         style="@style/DetailMovie.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/movie_rating"
+        app:layout_constraintEnd_toStartOf="@+id/favoriteImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
         tools:text="Super movie" />
@@ -31,6 +31,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/movie_title"
         tools:text="2018/10/05" />
+
+    <ImageView
+        android:id="@+id/favoriteImage"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:background="@color/colorWhite"
+        app:layout_constraintRight_toLeftOf="@id/movie_rating"
+        app:layout_constraintTop_toTopOf="@id/movie_rating"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        />
 
     <TextView
         android:id="@+id/movie_rating"

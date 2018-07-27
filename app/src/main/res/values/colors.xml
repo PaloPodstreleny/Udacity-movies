@@ -9,4 +9,5 @@
     <color name="colorBlackTransparent">#aa000000</color>
     <color name="colorHorizontalLineGrey">#dddddd</color>
     <color name="colorRed">#FF0000</color>
+    <color name="colorTransparent">#00FFFFFF</color>
 </resources>

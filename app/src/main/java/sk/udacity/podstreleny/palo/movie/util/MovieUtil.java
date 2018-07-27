@@ -1,6 +1,5 @@
 package sk.udacity.podstreleny.palo.movie.util;
 
-import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import java.io.IOException;
 import java.util.concurrent.Executor;
@@ -9,8 +8,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import sk.udacity.podstreleny.palo.movie.model.MovieList;
-import sk.udacity.podstreleny.palo.movie.model.MovieListResponse;
-import sk.udacity.podstreleny.palo.movie.model.RetrofitResponseRequest;
 import sk.udacity.podstreleny.palo.movie.db.MovieDatabase;
 
 public final class MovieUtil {

@@ -79,18 +79,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(context, MovieDetail.class);
-            intent.putExtra(Intent.EXTRA_TEXT,movies.get(getAdapterPosition()));
+            intent.putExtra(Intent.EXTRA_TEXT,movies.get(getAdapterPosition()).getId());
             context.startActivity(intent);
         }
 
         public void bind(int position) {
             Movie movie = movies.get(position);
             mTitleTextView.setText(movie.getTitle());
-            mRating.setText(String.valueOf(movie.getVote_average()));
-            Glide.with(context).load(MovieUrlUtil.IMAGE_BASE_URL + movie.getPoster_path())
+            mRating.setText(String.valueOf(movie.getVoteAverage()));
+            Glide.with(context).load(MovieUrlUtil.IMAGE_BASE_URL + movie.getPosterPath())
                     .into(mMovieImage);
             if(movie.isFavorite()) {
                 mStar.setImageResource(R.drawable.ic_star_yellow_36dp);
+                mStar.setVisibility(View.VISIBLE);
             }else {
                 mStar.setVisibility(View.GONE);
             }

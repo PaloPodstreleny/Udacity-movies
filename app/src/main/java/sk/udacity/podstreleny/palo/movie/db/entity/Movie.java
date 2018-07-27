@@ -1,25 +1,44 @@
 package sk.udacity.podstreleny.palo.movie.db.entity;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.google.gson.annotations.SerializedName;
+
+import sk.udacity.podstreleny.palo.movie.model.MovieType;
+import sk.udacity.podstreleny.palo.movie.util.MovieTypeConvertor;
 
 @Entity(tableName = "movies",
         indices = {
                 @Index("popularity"),
-                @Index("vote_average")})
+                @Index("voteAverage")})
 public class Movie implements Parcelable {
 
     @PrimaryKey
     private int id;
 
     private String title;
-    private String poster_path;
-    private String release_date;
-    private Float vote_average;
+
+    @SerializedName("poster_path")
+    @ColumnInfo(name = "poster_path")
+    private String posterPath;
+
+    @SerializedName("release_date")
+    @ColumnInfo(name = "release_date")
+    private String releaseDate;
+
+    @SerializedName("vote_average")
+    private Float voteAverage;
+
+    @ColumnInfo(name = "movie_type")
+    private MovieType movieType;
+
     private Float popularity;
     private String overview;
     private boolean favorite = false;
@@ -31,9 +50,9 @@ public class Movie implements Parcelable {
     protected Movie(Parcel in) {
         id = in.readInt();
         title = in.readString();
-        poster_path = in.readString();
-        release_date = in.readString();
-        vote_average = in.readFloat();
+        posterPath = in.readString();
+        releaseDate = in.readString();
+        voteAverage = in.readFloat();
         popularity = in.readFloat();
         overview = in.readString();
         favorite = in.readByte() != 0;
@@ -63,28 +82,28 @@ public class Movie implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(title);
-        dest.writeString(poster_path);
-        dest.writeString(release_date);
-        dest.writeFloat(vote_average);
+        dest.writeString(posterPath);
+        dest.writeString(releaseDate);
+        dest.writeFloat(voteAverage);
         dest.writeFloat(popularity);
         dest.writeString(overview);
         dest.writeByte((byte) (favorite ? 1 : 0));
     }
 
-    public String getRelease_date() {
-        return release_date;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setRelease_date(String release_date) {
-        this.release_date = release_date;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
-    public Float getVote_average() {
-        return vote_average;
+    public Float getVoteAverage() {
+        return voteAverage;
     }
 
-    public void setVote_average(Float vote_average) {
-        this.vote_average = vote_average;
+    public void setVoteAverage(Float voteAverage) {
+        this.voteAverage = voteAverage;
     }
 
     public String getOverview() {
@@ -95,12 +114,12 @@ public class Movie implements Parcelable {
         this.overview = overview;
     }
 
-    public String getPoster_path() {
-        return poster_path;
+    public String getPosterPath() {
+        return posterPath;
     }
 
-    public void setPoster_path(String poster_path) {
-        this.poster_path = poster_path;
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
     }
 
     public String getTitle() {
@@ -133,5 +152,13 @@ public class Movie implements Parcelable {
 
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public MovieType getMovieType() {
+        return movieType;
+    }
+
+    public void setMovieType(MovieType movieType) {
+        this.movieType = movieType;
     }
 }

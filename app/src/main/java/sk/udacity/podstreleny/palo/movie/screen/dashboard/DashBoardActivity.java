@@ -14,11 +14,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
-import sk.udacity.podstreleny.palo.movie.model.MovieListResponse;
+import sk.udacity.podstreleny.palo.movie.db.entity.Movie;
+import sk.udacity.podstreleny.palo.movie.model.Resource;
 import sk.udacity.podstreleny.palo.movie.viewModels.DashBoardViewModel;
 import sk.udacity.podstreleny.palo.movie.viewModels.DashBoardViewModelFactory;
 
@@ -56,38 +57,47 @@ public class DashBoardActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this,factory).get(DashBoardViewModel.class);
         showProgressBar();
 
-        viewModel.movies.observe(this, new Observer<MovieListResponse>() {
+
+
+        viewModel.movies.observe(this, new Observer<Resource<List<Movie>>>() {
             @Override
-            public void onChanged(@Nullable MovieListResponse movies) {
+            public void onChanged(@Nullable Resource<List<Movie>> movies) {
                 if (movies != null) {
-                    switch (movies.getResponse()){
-                        case SUCCESSFUL:
-                            adapter.swapData(movies.getData());
-                            showRecyclerView();
+                    switch (movies.getStatus()){
+                        //ERROR, LOADING, SUCCESS, UNAUTHORIZED
+                        case LOADING:
+                            hideRecyclerView();
+                            hideInternetConnectionProblem();
+                            hideUnAuthorizedError();
+                            showProgressBar();
+                        case SUCCESS:
                             hideProgressBar();
                             hideInternetConnectionProblem();
                             hideUnAuthorizedError();
-                            break;
-                        case NO_INTERNET_CONNECTION:
                             adapter.swapData(movies.getData());
-                            hideRecyclerView();
-                            hideProgressBar();
-                            showInterneConnectionProblem();
-                            hideUnAuthorizedError();
+                            showRecyclerView();
+                            break;
+                        case ERROR:
+                            if(movies.getData() == null || movies.getData().isEmpty()) {
+                                hideRecyclerView();
+                                hideProgressBar();
+                                hideUnAuthorizedError();
+                                showInterneConnectionProblem();
+                            }else {
+                                adapter.swapData(movies.getData());
+                            }
                             break;
                         case UNAUTHORIZED:
-                            adapter.swapData(movies.getData());
                             hideRecyclerView();
                             hideProgressBar();
                             hideInternetConnectionProblem();
                             showUnAuthorizedError();
                             break;
-                        case UNKNOWN:
                         default:
                             hideRecyclerView();
-                            showProgressBar();
                             hideInternetConnectionProblem();
                             hideUnAuthorizedError();
+                            showProgressBar();
                     }
                     showRecyclerView();
                 }
@@ -126,6 +136,10 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     private void retryRequest(int resourceID){
+        hideRecyclerView();
+        hideInternetConnectionProblem();
+        hideUnAuthorizedError();
+        showProgressBar();
         switch (resourceID) {
             default:
             case R.id.pupularity:
@@ -214,6 +228,13 @@ public class DashBoardActivity extends AppCompatActivity {
                     showProgressBar();
                     setPopularTv();
                     mResourceID = R.id.pupularity;
+                }
+                return true;
+            case R.id.favorite:
+                if(mResourceID != R.id.favorite){
+                    showProgressBar();
+                    setFavoriteTv();
+                    mResourceID = R.id.favorite;
                 }
                 return true;
             default:
