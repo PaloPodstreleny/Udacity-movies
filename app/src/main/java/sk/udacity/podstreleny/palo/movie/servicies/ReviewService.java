@@ -8,12 +8,13 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import sk.udacity.podstreleny.palo.movie.ApiKey;
 import sk.udacity.podstreleny.palo.movie.db.entity.Review;
+import sk.udacity.podstreleny.palo.movie.model.ReviewList;
 import sk.udacity.podstreleny.palo.movie.model.response.ApiResponse;
 
 public interface ReviewService {
 
 
     @GET("3/movie/{id}/reviews?api_key="+ ApiKey.API_KEY)
-    LiveData<ApiResponse<List<Review>>> getReviewsWithMovieID(@Path("id") int id);
+    LiveData<ApiResponse<ReviewList>> getReviewsWithMovieID(@Path("id") int id);
 
 }

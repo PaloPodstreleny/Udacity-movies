@@ -5,6 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 @Entity(tableName = "reviews",
         foreignKeys = @ForeignKey(entity = Movie.class,
@@ -15,18 +16,15 @@ import android.arch.persistence.room.PrimaryKey;
 
 public class Review {
 
+    @NonNull
     @PrimaryKey
-    private int id;
+    private String id;
 
     @ColumnInfo(name = "movie_id")
     private int movieID;
     private String author;
     private String content;
 
-
-    public int getId() {
-        return id;
-    }
 
     public int getMovieID() {
         return movieID;
@@ -40,7 +38,11 @@ public class Review {
         return content;
     }
 
-    public void setId(int id) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
         this.id = id;
     }
 

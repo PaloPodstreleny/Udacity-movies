@@ -16,6 +16,7 @@ import sk.udacity.podstreleny.palo.movie.db.entity.Movie;
 import sk.udacity.podstreleny.palo.movie.db.entity.Review;
 import sk.udacity.podstreleny.palo.movie.model.NetworkBoundResource;
 import sk.udacity.podstreleny.palo.movie.model.Resource;
+import sk.udacity.podstreleny.palo.movie.model.ReviewList;
 import sk.udacity.podstreleny.palo.movie.model.response.ApiResponse;
 import sk.udacity.podstreleny.palo.movie.servicies.RetrofitProvider;
 import sk.udacity.podstreleny.palo.movie.servicies.ReviewService;
@@ -53,7 +54,6 @@ public class MovieDetailRepository {
     }
 
 
-    //Update Movie in database
     public void updateMovie(final Movie movie){
         appExecutor.diskIO().execute(new Runnable() {
             @Override
@@ -64,11 +64,14 @@ public class MovieDetailRepository {
     }
 
     public LiveData<Resource<List<Review>>> getReviews(final int movieID){
-        return new NetworkBoundResource<List<Review>,List<Review>>(appExecutor){
+        return new NetworkBoundResource<List<Review>,ReviewList>(appExecutor){
 
             @Override
-            protected void saveCallResult(@NonNull List<Review> item) {
-                Log.d(TAG,"SavedResult");
+            protected void saveCallResult(@NonNull ReviewList item) {
+                for (Review review: item.getResults()){
+                    review.setMovieID(item.getId());
+                }
+                reviewDao.insertAll(item.getResults());
             }
 
             @Override
@@ -84,7 +87,7 @@ public class MovieDetailRepository {
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<List<Review>>> createCall() {
+            protected LiveData<ApiResponse<ReviewList>> createCall() {
                return reviewService.getReviewsWithMovieID(movieID);
             }
 
