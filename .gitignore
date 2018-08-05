@@ -64,9 +64,5 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 
-#ApiKey
-.app/src/main/java/sk/udacity/podstreleny/palo/movie/ApiKey.java
-C:\Users\Palo\Documents\movies\app\src\main\java\sk\udacity\podstreleny\palo\movie.ApiKey.java
-C:/Users/Palo/Documents/movies/app/src/main/java/sk/udacity/podstreleny/palo/movie.ApiKey.java
-/app/src/main/java/sk/udacity/podstreleny/palo/movie/ApiKey.java
-/movies/app/src/main/java/sk/udacity/podstreleny/palo/movie/ApiKey.java
+#ApiKey.app/src/main/java/sk/udacity/podstreleny/palo/movie/ApiKey.java
+
