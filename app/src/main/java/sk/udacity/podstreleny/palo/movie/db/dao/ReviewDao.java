@@ -9,8 +9,6 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 import sk.udacity.podstreleny.palo.movie.db.entity.Review;
-import sk.udacity.podstreleny.palo.movie.model.Resource;
-import sk.udacity.podstreleny.palo.movie.model.response.ApiResponse;
 
 @Dao
 public interface ReviewDao {
@@ -23,8 +21,5 @@ public interface ReviewDao {
 
     @Query("SELECT * FROM reviews WHERE movie_id = :movie_ids")
     LiveData<List<Review>> getAllReviews(int movie_ids);
-
-//    @Query("SELECT * FROM reviews WHERE movie_id = :movie_ids")
-//    LiveData<List<Review>>> getAllReviews(int movie_ids);
 
 }

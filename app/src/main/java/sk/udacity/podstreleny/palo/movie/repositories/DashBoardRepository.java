@@ -5,14 +5,16 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 import sk.udacity.podstreleny.palo.movie.AppExecutor;
 import sk.udacity.podstreleny.palo.movie.db.MovieDatabase;
 import sk.udacity.podstreleny.palo.movie.db.dao.MovieDao;
 import sk.udacity.podstreleny.palo.movie.db.entity.Movie;
 import sk.udacity.podstreleny.palo.movie.model.MovieList;
-import sk.udacity.podstreleny.palo.movie.model.MovieType;
+import sk.udacity.podstreleny.palo.movie.model.MovieOrder;
 import sk.udacity.podstreleny.palo.movie.model.NetworkBoundResource;
 import sk.udacity.podstreleny.palo.movie.model.Resource;
 import sk.udacity.podstreleny.palo.movie.model.response.ApiResponse;
@@ -34,20 +36,20 @@ public class DashBoardRepository {
         movieDao = MovieDatabase.getDatabaseInstance(context).movieDao();
     }
 
-    public static DashBoardRepository getInstance(Application context){
-        if(INSTANCE == null){
-            synchronized (DashBoardRepository.class){
+    public static DashBoardRepository getInstance(Application context) {
+        if (INSTANCE == null) {
+            synchronized (DashBoardRepository.class) {
                 INSTANCE = new DashBoardRepository(context);
             }
         }
         return INSTANCE;
     }
 
-    public LiveData<Resource<List<Movie>>> getFavouriteMovies(){
-        return new NetworkBoundResource<List<Movie>,List<Movie>>(executor){
+    public LiveData<Resource<List<Movie>>> getFavouriteMovies() {
+        return new NetworkBoundResource<List<Movie>, List<Movie>>(executor) {
             @Override
             protected void saveCallResult(@NonNull List<Movie> item) {
-                //noNeed
+                //This method never runs -> shouldFetch returns false
             }
 
             @Override
@@ -64,6 +66,7 @@ public class DashBoardRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<List<Movie>>> createCall() {
+                //This method never runs -> shouldFetch returns  false
                 return null;
             }
 
@@ -71,14 +74,14 @@ public class DashBoardRepository {
     }
 
 
-    public LiveData<Resource<List<Movie>>> getTopRateMovies(){
+    public LiveData<Resource<List<Movie>>> getTopRateMovies() {
         final String topRated = "top_rated";
 
-        return new NetworkBoundResource<List<Movie>,MovieList>(executor){
+        return new NetworkBoundResource<List<Movie>, MovieList>(executor) {
             @Override
             protected void saveCallResult(@NonNull MovieList item) {
-                for (Movie movie : item.getResults()){
-                    movie.setMovieType(MovieType.TOP_RATED);
+                for (Movie movie : item.getResults()) {
+                    movie.setMovieOrder(MovieOrder.TOP_RATED);
                 }
                 movieDao.insertAll(item.getResults());
             }
@@ -102,46 +105,46 @@ public class DashBoardRepository {
 
             @Override
             protected void onFetchFailed() {
-                Log.e("DashboardRepository","Problem with fetching popular movies!");
+                Log.e("DashboardRepository", "Problem with fetching popular movies!");
             }
 
         }.getAsLiveData();
     }
 
-    public LiveData<Resource<List<Movie>>> getPopularMovies(){
+    public LiveData<Resource<List<Movie>>> getPopularMovies() {
         final String popular = "popular";
-      return new NetworkBoundResource<List<Movie>,MovieList>(executor){
-          @Override
-          protected void saveCallResult(@NonNull MovieList item) {
-              for (Movie movie : item.getResults()){
-                  movie.setMovieType(MovieType.POPULAR);
-              }
-              movieDao.insertAll(item.getResults());
-          }
+        return new NetworkBoundResource<List<Movie>, MovieList>(executor) {
+            @Override
+            protected void saveCallResult(@NonNull MovieList item) {
+                for (Movie movie : item.getResults()) {
+                    movie.setMovieOrder(MovieOrder.POPULARITY);
+                }
+                movieDao.insertAll(item.getResults());
+            }
 
-          @Override
-          protected boolean shouldFetch(@Nullable List<Movie> data) {
-              return (data == null || data.isEmpty() || repoListRateLimit.shouldFetch(popular) );
-          }
+            @Override
+            protected boolean shouldFetch(@Nullable List<Movie> data) {
+                return (data == null || data.isEmpty() || repoListRateLimit.shouldFetch(popular));
+            }
 
-          @NonNull
-          @Override
-          protected LiveData<List<Movie>> loadFromDb() {
-              return movieDao.getPopularMovies();
-          }
+            @NonNull
+            @Override
+            protected LiveData<List<Movie>> loadFromDb() {
+                return movieDao.getPopularMovies();
+            }
 
-          @NonNull
-          @Override
-          protected LiveData<ApiResponse<MovieList>> createCall() {
-             return movieService.popular();
-          }
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<MovieList>> createCall() {
+                return movieService.popular();
+            }
 
-          @Override
-          protected void onFetchFailed() {
-              Log.e("DashboardRepository","Problem with fetching popular movies!");
-          }
+            @Override
+            protected void onFetchFailed() {
+                Log.e("DashboardRepository", "Problem with fetching popular movies!");
+            }
 
-      }.getAsLiveData();
+        }.getAsLiveData();
 
     }
 

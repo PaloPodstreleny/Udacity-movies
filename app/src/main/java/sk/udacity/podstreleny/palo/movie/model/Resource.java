@@ -29,12 +29,14 @@ public class Resource<T> {
     }
 
     public static <T> Resource<T> unauthorized(T data){
-        return new Resource<>(Status.UNAUTHORIZED,null,null);
+        return new Resource<>(Status.UNAUTHORIZED,data,
+                null);
     }
 
     public static <T> Resource<T> loading(Object data){
         return new Resource<>(Status.LOADING,null,null);
     }
+
 
     @NonNull
     public Status getStatus() {

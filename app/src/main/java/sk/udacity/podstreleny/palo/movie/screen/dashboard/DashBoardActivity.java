@@ -2,6 +2,7 @@ package sk.udacity.podstreleny.palo.movie.screen.dashboard;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,30 +15,43 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sk.udacity.podstreleny.palo.movie.R;
 import sk.udacity.podstreleny.palo.movie.db.entity.Movie;
+import sk.udacity.podstreleny.palo.movie.model.MovieOrder;
 import sk.udacity.podstreleny.palo.movie.model.Resource;
 import sk.udacity.podstreleny.palo.movie.viewModels.DashBoardViewModel;
-import sk.udacity.podstreleny.palo.movie.viewModels.DashBoardViewModelFactory;
 
 public class DashBoardActivity extends AppCompatActivity {
 
-    private final static int MULTIPLE_COLUMN = 2;
-    private static final String RESOURCE_ID = "resource_id";
-    private int mResourceID;
+
+    private static final String MOVIE_TYPE = "movieTypeID";
+    private int movieTypeID;
+    private MovieOrder movieType;
 
     private DashBoardViewModel viewModel;
 
-    @BindView(R.id.progress_bar) ProgressBar mProgressBar;
-    @BindView(R.id.main_rv) RecyclerView recyclerView;
-    @BindView(R.id.actualOrdering) TextView mOrderingTv;
-    @BindView(R.id.top_bar) Toolbar toolbar;
-    @BindView(R.id.retry_btn) Button mRetryButton;
-    @BindView(R.id.problem_internet_tv) TextView mInternetProblemTv;
-    @BindView(R.id.problem_unauthorized_tv) TextView mUnAuthorizedProblemTv;
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
+
+    @BindView(R.id.main_rv)
+    RecyclerView recyclerView;
+
+    @BindView(R.id.actualOrdering)
+    TextView mOrderingTv;
+
+    @BindView(R.id.top_bar)
+    Toolbar toolbar;
+
+    @BindView(R.id.retry_btn)
+    Button mRetryButton;
+
+    @BindView(R.id.error_text_view)
+    TextView errorTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,165 +60,224 @@ public class DashBoardActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        final MovieAdapter adapter = new MovieAdapter(this);
 
-        final GridLayoutManager manager = new GridLayoutManager(this,MULTIPLE_COLUMN);
+        //Setting recyclerView + Adapter
+        final int NUMBER_OF_GRID_COLUMNS = getResources().getInteger(R.integer.number_of_grid_columns);
+        final MovieAdapter adapter = new MovieAdapter(this);
+        final GridLayoutManager manager = new GridLayoutManager(this, NUMBER_OF_GRID_COLUMNS);
         recyclerView.setLayoutManager(manager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
-        DashBoardViewModelFactory factory = new DashBoardViewModelFactory(getApplication());
-        viewModel = ViewModelProviders.of(this,factory).get(DashBoardViewModel.class);
-        showProgressBar();
-
-
-
+        //Get instance of viewModel and observe movies
+        viewModel = ViewModelProviders.of(this).get(DashBoardViewModel.class);
         viewModel.movies.observe(this, new Observer<Resource<List<Movie>>>() {
             @Override
             public void onChanged(@Nullable Resource<List<Movie>> movies) {
                 if (movies != null) {
-                    switch (movies.getStatus()){
-                        //ERROR, LOADING, SUCCESS, UNAUTHORIZED
+                    switch (movies.getStatus()) {
                         case LOADING:
-                            hideRecyclerView();
-                            hideInternetConnectionProblem();
-                            hideUnAuthorizedError();
-                            showProgressBar();
+                            changeRecyclerViewVisibility(View.GONE);
+                            changeErrorTextViewVisibility(View.GONE, null, false);
+                            changeProgressBarVisibility(View.VISIBLE);
+                            break;
                         case SUCCESS:
-                            hideProgressBar();
-                            hideInternetConnectionProblem();
-                            hideUnAuthorizedError();
-                            adapter.swapData(movies.getData());
-                            showRecyclerView();
+                            if (movies.getData() != null) {
+                                if (movies.getData().isEmpty()) {
+                                    changeRecyclerViewVisibility(View.GONE);
+                                    changeErrorTextViewVisibility(View.VISIBLE, getString(R.string.main_screen_no_favorite_movie), false);
+                                } else {
+                                    showData(adapter, movies.getData());
+                                }
+                            }
+                            changeProgressBarVisibility(View.GONE);
                             break;
                         case ERROR:
-                            if(movies.getData() == null || movies.getData().isEmpty()) {
-                                hideRecyclerView();
-                                hideProgressBar();
-                                hideUnAuthorizedError();
-                                showInterneConnectionProblem();
-                            }else {
-                                adapter.swapData(movies.getData());
+                            if (movies.getData() == null || movies.getData().isEmpty()) {
+                                changeRecyclerViewVisibility(View.GONE);
+                                changeErrorTextViewVisibility(View.VISIBLE, getString(R.string.main_screen_internet_connection_problem), true);
+                                changeProgressBarVisibility(View.GONE);
+                            } else {
+                                showData(adapter, movies.getData());
                             }
                             break;
                         case UNAUTHORIZED:
-                            hideRecyclerView();
-                            hideProgressBar();
-                            hideInternetConnectionProblem();
-                            showUnAuthorizedError();
+                            if (movies.getData() == null || movies.getData().isEmpty()) {
+                                changeRecyclerViewVisibility(View.GONE);
+                                changeErrorTextViewVisibility(View.VISIBLE, getString(R.string.main_screen_unauthorized), false);
+                                changeProgressBarVisibility(View.GONE);
+                            } else {
+                                showData(adapter, movies.getData());
+                            }
                             break;
                         default:
-                            hideRecyclerView();
-                            hideInternetConnectionProblem();
-                            hideUnAuthorizedError();
-                            showProgressBar();
+                            throw new IllegalArgumentException("Movie status contains not allowed value");
                     }
-                    showRecyclerView();
                 }
             }
         });
 
+        //Set listener for re-fetching data
         mRetryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideInternetConnectionProblem();
-                hideRecyclerView();
-                showProgressBar();
-                retryRequest(mResourceID);
+                retryRequest(movieType);
             }
         });
 
-        if (savedInstanceState != null && savedInstanceState.containsKey(RESOURCE_ID)) {
-            mResourceID = savedInstanceState.getInt(RESOURCE_ID);
-            switch (mResourceID){
-                default:
-                case R.id.pupularity:
-                    setPopularTv();
-                    break;
-                case R.id.top_rating:
-                    setTopRatedTv();
-                    break;
-                case R.id.favorite:
-                    setFavoriteTv();
-                    break;
-            }
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(MOVIE_TYPE)) {
+            movieType = convertMovieCategoryIDToMovieType(savedInstanceState.getInt(MOVIE_TYPE));
+            setMovieOrder(movieType);
         } else {
-            mResourceID = R.id.pupularity;
-            setPopularTv();
+            movieType = MovieOrder.POPULARITY;
+            setMovieOrder(movieType);
         }
 
     }
 
-    private void retryRequest(int resourceID){
-        hideRecyclerView();
-        hideInternetConnectionProblem();
-        hideUnAuthorizedError();
-        showProgressBar();
-        switch (resourceID) {
+    private void showData(MovieAdapter adapter, List<Movie> data) {
+        adapter.swapData(data);
+        changeRecyclerViewVisibility(View.VISIBLE);
+        changeErrorTextViewVisibility(View.GONE, null, false);
+    }
+
+
+    /***
+     *
+     * Helper method convert movieCategoryID to MovieType object
+     *
+     * @param movieCategoryID int number of 0,1,2 representing movieCategoryID
+     * @return MovieType object according to parameter value
+     */
+    private MovieOrder convertMovieCategoryIDToMovieType(int movieCategoryID) {
+        switch (movieCategoryID) {
+            case 0:
+                return MovieOrder.POPULARITY;
+            case 1:
+                return MovieOrder.TOP_RATED;
+            case 2:
+                return MovieOrder.FAVORITE;
             default:
-            case R.id.pupularity:
-                viewModel.setPopularMovies();
-                break;
-            case R.id.top_rating:
-                viewModel.setTopRatedMovies();
-                break;
-            case R.id.favorite:
-                viewModel.setFavoriteMovies();
-                break;
+                throw new IllegalArgumentException("Movie ID can have just values 0, 1, 2");
         }
     }
 
-    private void setPopularTv() {
-        final String arg = getString(R.string.main_screen_menu_popularity);
-        mOrderingTv.setText(getString(R.string.main_screen_order_text, arg));
-        viewModel.setPopularMovies();
+    /***
+     *
+     * Helper method convert MovieOrder object to it's int representation
+     *
+     * @param movieType represents MovieType
+     * @return int representation of MovieType
+     */
+    private int converMovieTypeToMovieCategoryID(MovieOrder movieType) {
+        switch (movieType) {
+            case POPULARITY:
+                return 0;
+            case FAVORITE:
+                return 2;
+            case TOP_RATED:
+                return 1;
+            default:
+                throw new IllegalArgumentException("MovieType can contains: Popular, Favorite or TopRated categories");
+        }
     }
 
-    private void setTopRatedTv() {
-        final String arg = getString(R.string.main_screen_menu_highest_rating);
-        mOrderingTv.setText(getString(R.string.main_screen_order_text, arg));
-        viewModel.setTopRatedMovies();
+    /***
+     *
+     * Helper method change visibility of ProgressBar according to visibility parameter
+     *
+     * @param visibility value of View visibility (VISIBLE,GONE..)
+     */
+    private void changeProgressBarVisibility(@NonNull int visibility) {
+        mProgressBar.setVisibility(visibility);
     }
 
-    private void setFavoriteTv(){
-        final String arg = getString(R.string.main_screen_menu_favorite);
-        mOrderingTv.setText(getString(R.string.main_screen_order_text,arg));
-        viewModel.setFavoriteMovies();
+
+    /***
+     *
+     * Helper method change visibility of error TextView and set text according to "text" parameter.
+     * Moreover if paramter "button" is equal to true, retry button is visible to re-fetch data.
+     *
+     * @param visibility int value of View visibiliy
+     * @param text String representation of error message
+     * @param button boolean value which represent button visibility
+     */
+    private void changeErrorTextViewVisibility(int visibility, @Nullable String text, boolean button) {
+        if (visibility == View.VISIBLE && text != null) {
+            errorTextView.setVisibility(View.VISIBLE);
+            errorTextView.setText(text);
+            if (button) {
+                mRetryButton.setVisibility(View.VISIBLE);
+            } else {
+                mRetryButton.setVisibility(View.GONE);
+            }
+        } else if (visibility == View.GONE) {
+            errorTextView.setVisibility(View.GONE);
+            mRetryButton.setVisibility(View.GONE);
+        }
+
     }
 
-    private void showRecyclerView() {
-        recyclerView.setVisibility(View.VISIBLE);
+
+    /***
+     *
+     * Helper method change visibility of recyclerView according to visibility parameter
+     *
+     * @param visibility value of View visibility (VISIBLE,GONE..)
+     */
+    private void changeRecyclerViewVisibility(int visibility) {
+        recyclerView.setVisibility(visibility);
     }
 
-    private void hideRecyclerView(){
-        recyclerView.setVisibility(View.GONE);
+    /***
+     *
+     * Helper method set text in TextView and update ViewModel according to MovieType parameter
+     *
+     * @param movieType type of the movies which will be shown
+     */
+
+    private void setMovieOrder(MovieOrder movieType) {
+        switch (movieType) {
+            case POPULARITY:
+                mOrderingTv.setText(getString(R.string.main_screen_order_text, getString(R.string.main_screen_menu_popularity)));
+                viewModel.setMovieOrder(MovieOrder.POPULARITY, false);
+                break;
+            case FAVORITE:
+                mOrderingTv.setText(getString(R.string.main_screen_order_text, getString(R.string.main_screen_menu_favorite)));
+                viewModel.setMovieOrder(MovieOrder.FAVORITE, false);
+                break;
+            case TOP_RATED:
+                mOrderingTv.setText(getString(R.string.main_screen_order_text, getString(R.string.main_screen_menu_highest_rating)));
+                viewModel.setMovieOrder(MovieOrder.TOP_RATED, false);
+                break;
+            default:
+                throw new IllegalArgumentException("You provided wrong MovieType!");
+        }
     }
 
-    private void showProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
+    /***
+     *
+     * Helper method which trying to get Movies according to movieType parameter
+     *
+     * @param movieType category of movies
+     */
+    private void retryRequest(MovieOrder movieType) {
+        switch (movieType) {
+            case POPULARITY:
+                viewModel.setMovieOrder(MovieOrder.POPULARITY, true);
+                break;
+            case TOP_RATED:
+                viewModel.setMovieOrder(MovieOrder.TOP_RATED, true);
+                break;
+            case FAVORITE:
+                viewModel.setMovieOrder(MovieOrder.FAVORITE, true);
+                break;
+            default:
+                throw new IllegalArgumentException("MovieType can contains just POPULAR, TOP_RATED or FAVORITE categories");
+        }
     }
 
-    private void hideProgressBar(){
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    private void showUnAuthorizedError(){
-        mUnAuthorizedProblemTv.setVisibility(View.VISIBLE);
-    }
-
-    private void hideUnAuthorizedError(){
-        mUnAuthorizedProblemTv.setVisibility(View.GONE);
-    }
-
-    private void showInterneConnectionProblem(){
-        mRetryButton.setVisibility(View.VISIBLE);
-        mInternetProblemTv.setVisibility(View.VISIBLE);
-    }
-
-    private void hideInternetConnectionProblem(){
-        mRetryButton.setVisibility(View.GONE);
-        mInternetProblemTv.setVisibility(View.GONE);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -215,36 +288,33 @@ public class DashBoardActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.top_rating:
-                if (mResourceID != R.id.top_rating) {
-                    showProgressBar();
-                    setTopRatedTv();
-                    mResourceID = R.id.top_rating;
-                }
-                return true;
-            case R.id.pupularity:
-                if (mResourceID != R.id.pupularity) {
-                    showProgressBar();
-                    setPopularTv();
-                    mResourceID = R.id.pupularity;
-                }
-                return true;
-            case R.id.favorite:
-                if(mResourceID != R.id.favorite){
-                    showProgressBar();
-                    setFavoriteTv();
-                    mResourceID = R.id.favorite;
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return getProperData(item.getItemId(), super.onOptionsItemSelected(item));
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(RESOURCE_ID, mResourceID);
+        movieTypeID = converMovieTypeToMovieCategoryID(movieType);
+        outState.putInt(MOVIE_TYPE, movieTypeID);
         super.onSaveInstanceState(outState);
+    }
+
+
+    private boolean getProperData(int code, boolean defaultReturn) {
+        switch (code) {
+            case R.id.top_rating:
+                movieType = MovieOrder.TOP_RATED;
+                setMovieOrder(MovieOrder.TOP_RATED);
+                return true;
+            case R.id.pupularity:
+                movieType = MovieOrder.POPULARITY;
+                setMovieOrder(MovieOrder.POPULARITY);
+                return true;
+            case R.id.favorite:
+                movieType = MovieOrder.FAVORITE;
+                setMovieOrder(MovieOrder.FAVORITE);
+                return true;
+            default:
+                return defaultReturn;
+        }
     }
 }

@@ -13,7 +13,6 @@ import sk.udacity.podstreleny.palo.movie.model.response.ApiResponse;
 
 public interface ReviewService {
 
-
     @GET("3/movie/{id}/reviews?api_key="+ ApiKey.API_KEY)
     LiveData<ApiResponse<ReviewList>> getReviewsWithMovieID(@Path("id") int id);
 

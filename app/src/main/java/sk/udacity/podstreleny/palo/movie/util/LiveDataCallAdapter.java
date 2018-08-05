@@ -22,7 +22,7 @@ class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<ApiResponse<R>>>
 
     private Type responseType;
 
-    public LiveDataCallAdapter(Type responseType){
+    public LiveDataCallAdapter(Type responseType) {
         this.responseType = responseType;
     }
 
@@ -35,7 +35,7 @@ class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<ApiResponse<R>>>
     public LiveData<ApiResponse<R>> adapt(final Call<R> call) {
 
 
-        return new LiveData<ApiResponse<R>>(){
+        return new LiveData<ApiResponse<R>>() {
 
             private AtomicBoolean started = new AtomicBoolean(false);
 
@@ -43,7 +43,7 @@ class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<ApiResponse<R>>>
             @Override
             protected void onActive() {
                 super.onActive();
-                if(started.compareAndSet(false,true)){
+                if (started.compareAndSet(false, true)) {
                     call.enqueue(new Callback<R>() {
                         @Override
                         public void onResponse(Call<R> call, Response<R> response) {

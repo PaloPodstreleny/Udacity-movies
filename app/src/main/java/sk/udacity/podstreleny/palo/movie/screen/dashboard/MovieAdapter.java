@@ -3,6 +3,7 @@ package sk.udacity.podstreleny.palo.movie.screen.dashboard;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,12 +52,21 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         }
     }
 
+    /***
+     *
+     * Method updated movies list nad notifies adapter
+     *
+     * @param movies new list of movies
+     */
     public void swapData(List<Movie> movies) {
         this.movies = movies;
         notifyDataSetChanged();
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        @BindView(R.id.parent_layout)
+        ConstraintLayout mConstraintLayout;
 
         @BindView(R.id.movie_title)
         TextView mTitleTextView;
@@ -67,21 +77,20 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         @BindView(R.id.rating_tv)
         TextView mRating;
 
-        @BindView(R.id.starImage)
-        ImageView mStar;
-
         MovieViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            mMovieImage.setOnClickListener(this);
+            mConstraintLayout.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(context, MovieDetail.class);
-            intent.putExtra(Intent.EXTRA_TEXT,movies.get(getAdapterPosition()).getId());
+            intent.putExtra(Intent.EXTRA_TEXT, movies.get(getAdapterPosition()).getId());
             context.startActivity(intent);
         }
+
+
 
         public void bind(int position) {
             Movie movie = movies.get(position);
@@ -90,10 +99,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             Glide.with(context).load(MovieUrlUtil.IMAGE_BASE_URL + movie.getPosterPath())
                     .into(mMovieImage);
             if(movie.isFavorite()) {
-                mStar.setImageResource(R.drawable.ic_star_yellow_36dp);
-                mStar.setVisibility(View.VISIBLE);
+                mRating.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.round_colorful));
+                mRating.setTextColor(context.getResources().getColor(R.color.colorTextPrimary));
             }else {
-                mStar.setVisibility(View.GONE);
+                mRating.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.round));
+                mRating.setTextColor(context.getResources().getColor(R.color.colorTextSecondary));
             }
 
         }

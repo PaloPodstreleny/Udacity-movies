@@ -22,8 +22,8 @@
             style="@style/DetailMovie.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@+id/favoriteImage"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/movie_rating"
             app:layout_constraintTop_toBottomOf="@+id/include"
             tools:text="Super movie" />
 
@@ -37,22 +37,14 @@
             app:layout_constraintTop_toBottomOf="@+id/movie_title"
             tools:text="2018/10/05" />
 
-        <ImageView
-            android:id="@+id/favoriteImage"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@color/colorWhite"
-            app:layout_constraintRight_toLeftOf="@id/movie_rating"
-            app:layout_constraintTop_toTopOf="@id/movie_rating" />
 
         <TextView
             android:id="@+id/movie_rating"
             style="@style/DetailMovie.AverageRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/movie_title"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/movie_title"
             tools:text="8.5" />
 
@@ -63,7 +55,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorWhite"
             android:orientation="horizontal"
-            android:padding="16dp"
+            android:padding="@dimen/mediumTextMargin"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/movie_release_date"
@@ -73,38 +65,46 @@
             <ImageView
                 android:id="@+id/movie_image"
                 style="@style/DetailMovie.Image"
-                android:layout_width="88dp"
-                android:layout_height="wrap_content" />
+                android:layout_width="@dimen/image_width_detail"
+                android:layout_height="wrap_content"
+                tools:src="@drawable/round" />
 
             <TextView
                 android:id="@+id/movie_overview"
                 style="@style/DetailMovie.Description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp" />
+                android:layout_marginLeft="@dimen/smallTextMargin" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonFavorite"
+            style="@style/MovieDetail.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_add_to_favorite"
+            android:theme="@style/GreenButton"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearParent" />
 
         <View
             android:id="@+id/horizontalDevider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="16dp"
             android:background="@color/colorHorizontalLineGrey"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearParent" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonFavorite" />
 
 
         <TextView
             android:id="@+id/reviews"
+            style="@style/MovieDetail.TextMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
-            android:foreground="?attr/selectableItemBackground"
-            android:padding="8dp"
             android:text="@string/movie_detail_screen_reviews_title"
-            android:textColor="@color/colorBlack"
-            android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/horizontalDevider" />
@@ -116,25 +116,19 @@
             android:background="@color/colorHorizontalLineGrey"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reviews" />
+            app:layout_constraintTop_toBottomOf="@+id/recycler_reviews" />
 
         <ImageView
             android:id="@+id/reviewImage"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_margin="8dp"
-            android:background="?attr/selectableItemBackground"
-            android:src="@drawable/ic_arrow_down"
+            style="@style/MovieDetail.Icon"
             app:layout_constraintBottom_toBottomOf="@id/reviews"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/reviews" />
 
         <ProgressBar
             android:id="@+id/reviewProgressBar"
-            android:layout_width="24dp"
-            android:layout_height="0dp"
-            android:layout_marginRight="8dp"
-            android:visibility="gone"
+            style="@style/MovieDetail.ProgressBar"
+            app:layout_constraintBottom_toBottomOf="@id/reviews"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/reviews" />
 
@@ -142,12 +136,55 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_reviews"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#eeeeee"
+            android:layout_height="wrap_content"
             android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/reviews" />
+
+
+        <TextView
+            android:id="@+id/videos"
+            style="@style/MovieDetail.TextMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/movie_detail_screen_videos_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalDeviderUnderReview" />
+
+        <View
+            android:id="@+id/horizontalDeviderUnderVideos"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorHorizontalLineGrey"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/videos" />
+
+        <ImageView
+            android:id="@+id/videoImage"
+            style="@style/MovieDetail.Icon"
+            app:layout_constraintBottom_toBottomOf="@id/videos"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/videos" />
+
+        <ProgressBar
+            android:id="@+id/videoProgressBar"
+            style="@style/MovieDetail.ProgressBar"
+            app:layout_constraintBottom_toBottomOf="@id/videos"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/videos" />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_videos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/videos" />
 
 
     </android.support.constraint.ConstraintLayout>

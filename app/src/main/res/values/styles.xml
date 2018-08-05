@@ -1,17 +1,20 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:textColor">@color/colorBlack</item>
-        <item name="colorPrimary">@color/colorWhite</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionOverflowButtonStyle">@style/MenuButtonOverflow</item>
         <item name="titleTextColor">@color/colorBlack</item>
         <item name="popupTheme">@style/CustomPopupTheme</item>
+        <item name="buttonStyle">@style/Widget.AppCompat.Button.Borderless</item>
     </style>
 
+    <style name="AppThemeButton" parent="AppTheme">
+        <item name="colorButtonNormal">@color/colorBlack</item>
+    </style>
 
     <style name="CustomPopupTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:popupBackground">@color/colorWhite</item>
@@ -27,32 +30,31 @@
 
     <style name="Dashboard"></style>
 
-    <style name="Dashboard.ListItemLayout">
+    <style name="Dashboard.ListItemLayout" parent="Clickable">
         <item name="android:layout_margin">4dp</item>
     </style>
 
-    <style name="Dashboard.RatingText">
-        <!--<item name="android:layout_gravity">right|top</item>-->
-        <item name="android:background">@color/colorWhite</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:textColor">@color/colorBlackTransparent</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
+
+    <style name="Dashboard.RatingText" parent="SecondaryText.ListItemMovieType">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/round</item>
+        <item name="android:layout_margin">@dimen/smallTextMargin</item>
+        <item name="android:elevation">2dp</item>
     </style>
 
     <style name="Dashboard.TitleText">
-        <item name="android:padding">8dp</item>
+        <item name="android:padding">@dimen/smallTextMargin</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Dashboard.RecyclerView">
-        <item name="android:background">@color/colorGreyBackground</item>
+        <item name="android:background">@color/colorWhite</item>
         <item name="android:padding">4dp</item>
     </style>
 
     <style name="Dashboard.OrderByText">
-        <item name="android:padding">16dp</item>
+        <item name="android:padding">@dimen/mediumTextMargin</item>
         <item name="android:gravity">right</item>
         <item name="android:background">@color/colorWhite</item>
         <item name="android:textColor">@color/colorBlack</item>
@@ -62,42 +64,112 @@
     <style name="DetailMovie"></style>
 
     <style name="DetailMovie.Title">
-        <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:layout_marginRight">16dp</item>
-        <item name="android:paddingBottom">8dp</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:paddingTop">16dp</item>
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">24sp</item>
+        <item name="android:layout_marginLeft">@dimen/mediumTextMargin</item>
+        <item name="android:layout_marginTop">@dimen/mediumTextMargin</item>
+        <item name="android:layout_marginRight">@dimen/smallTextMargin</item>
     </style>
 
-    <style name="DetailMovie.Date">
+    <style name="DetailMovie.Date" parent="SecondaryText.ListItemMovieType">
         <item name="android:textStyle">italic</item>
-        <item name="android:textColor">@color/colorBlack</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingBottom">16dp</item>
+        <item name="android:layout_marginTop">@dimen/smallTextMargin</item>
+        <item name="android:layout_marginRight">@dimen/mediumTextMargin</item>
+        <item name="android:layout_marginLeft">@dimen/mediumTextMargin</item>
     </style>
 
     <style name="DetailMovie.AverageRating" parent="Dashboard.RatingText">
-        <item name="android:layout_marginEnd">8dp</item>
-        <item name="android:layout_marginRight">8dp</item>
-        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginRight">@dimen/mediumTextMargin</item>
+        <item name="android:layout_marginTop">0dp</item>
     </style>
 
     <style name="DetailMovie.LinearLayout">
         <item name="android:background">@color/colorWhite</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:padding">16dp</item>
+        <item name="android:padding">@dimen/mediumTextMargin</item>
     </style>
 
     <style name="DetailMovie.Image">
         <item name="android:layout_marginTop">4dp</item>
     </style>
 
+    <style name="GreenButton">
+        <item name="android:textColor">@color/colorGreen</item>
+    </style>
+
+    <style name="RedButton" parent="GreenButton">
+        <item name="android:textColor">@color/colorRed</item>
+    </style>
+
     <style name="DetailMovie.Description">
         <item name="android:textColor">@color/colorBlack</item>
-        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginLeft">@dimen/smallTextMargin</item>
+    </style>
+
+    <style name="Clickable">
+        <item name="android:clickable">true</item>
+        <item name="android:selectable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="Clickable.ClickableVideoListItem">
+        <item name="android:background">@color/colorWhite</item>
+        <item name="android:padding">@dimen/mediumTextMargin</item>
+    </style>
+
+
+    <style name="PrimaryText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+    </style>
+
+    <style name="SecondaryText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorTextSecondary</item>
+    </style>
+
+    <style name="SecondaryText.ListItemMovieType">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SecondaryText.ListItemReviewAuthor" parent="SecondaryText.ListItemMovieType">
+        <item name="android:layout_marginLeft">@dimen/smallTextMargin</item>
+    </style>
+
+    <style name="PrimaryText.ListItemReviewText">
+        <item name="android:layout_marginTop">@dimen/mediumTextMargin</item>
+    </style>
+    <style name="PrimaryText.ListItemVideoName">
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:layout_marginLeft">@dimen/smallTextMargin</item>
+        <item name="android:layout_marginRight">@dimen/smallTextMargin</item>
+    </style>
+
+    <style name="MovieDetail"></style>
+    <style name="MovieDetail.ProgressBar">
+        <item name="android:layout_width">@dimen/smallProgressBar</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_marginRight">@dimen/smallTextMargin</item>
+    </style>
+
+    <style name="MovieDetail.Icon">
+        <item name="android:layout_width">@dimen/smallIcon</item>
+        <item name="android:layout_height">@dimen/smallIcon</item>
+        <item name="android:layout_marginRight">@dimen/smallTextMargin</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:src">@drawable/ic_arrow_down</item>
+    </style>
+    
+    <style name="MovieDetail.TextMenu" parent="PrimaryText">
+        <item name="android:background">@color/colorWhite</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:padding">@dimen/mediumTextMargin</item>
+    </style>
+
+    <style name="MovieDetail.Button">
+        <item name="android:layout_marginRight">@dimen/mediumTextMargin</item>
+        <item name="android:drawablePadding">@dimen/smallTextMargin</item>
+        <item name="android:paddingLeft">@dimen/smallTextMargin</item>
     </style>
 </resources>

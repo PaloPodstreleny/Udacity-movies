@@ -111,12 +111,11 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
                         }
                     });
 
-                } else if (response instanceof ApiUnauthorizedResponse){
+                } else if (response instanceof ApiUnauthorizedResponse) {
                     onFetchFailed();
                     result.addSource(dbSource, new Observer<ResultType>() {
                         @Override
                         public void onChanged(@Nullable ResultType resultType) {
-                            //TODOs
                             setValue(Resource.unauthorized(resultType));
                         }
                     });
@@ -155,8 +154,8 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     // Called when the fetch fails. The child class may want to reset components
     // like rate limiter.
     @MainThread
-    protected  void onFetchFailed(){
-        Log.e("NetworkBoundResource","Problem with fetching data!");
+    protected void onFetchFailed() {
+        Log.e("NetworkBoundResource", "Problem with fetching data!");
     }
 
 

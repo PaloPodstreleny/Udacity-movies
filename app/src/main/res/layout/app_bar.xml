@@ -4,8 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorWhite"
     style="@style/CustomToolbar"
+    android:background="@color/colorWhite"
+    android:elevation="4dp"
     android:theme="@style/CustomToolbar"
     >
 

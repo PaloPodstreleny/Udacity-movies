@@ -2,23 +2,18 @@ package sk.udacity.podstreleny.palo.movie.db.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import sk.udacity.podstreleny.palo.movie.model.MovieType;
-import sk.udacity.podstreleny.palo.movie.util.MovieTypeConvertor;
+import sk.udacity.podstreleny.palo.movie.model.MovieOrder;
 
 @Entity(tableName = "movies",
         indices = {
                 @Index("popularity"),
                 @Index("voteAverage")})
-public class Movie implements Parcelable {
+public class Movie {
 
     @PrimaryKey
     private int id;
@@ -37,57 +32,13 @@ public class Movie implements Parcelable {
     private Float voteAverage;
 
     @ColumnInfo(name = "movie_type")
-    private MovieType movieType;
+    private MovieOrder movieOrder;
 
     private Float popularity;
     private String overview;
     private boolean favorite = false;
 
-    public Movie(){
-    }
-
-    @Ignore
-    protected Movie(Parcel in) {
-        id = in.readInt();
-        title = in.readString();
-        posterPath = in.readString();
-        releaseDate = in.readString();
-        voteAverage = in.readFloat();
-        popularity = in.readFloat();
-        overview = in.readString();
-        favorite = in.readByte() != 0;
-    }
-
-    @Ignore
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
-
-    @Ignore
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Ignore
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(title);
-        dest.writeString(posterPath);
-        dest.writeString(releaseDate);
-        dest.writeFloat(voteAverage);
-        dest.writeFloat(popularity);
-        dest.writeString(overview);
-        dest.writeByte((byte) (favorite ? 1 : 0));
+    public Movie() {
     }
 
     public String getReleaseDate() {
@@ -154,11 +105,11 @@ public class Movie implements Parcelable {
         this.favorite = favorite;
     }
 
-    public MovieType getMovieType() {
-        return movieType;
+    public MovieOrder getMovieOrder() {
+        return movieOrder;
     }
 
-    public void setMovieType(MovieType movieType) {
-        this.movieType = movieType;
+    public void setMovieOrder(MovieOrder movieOrder) {
+        this.movieOrder = movieOrder;
     }
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/parentCLayout"
+        style="@style/Clickable.ClickableVideoListItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/authorIcons"
+            android:layout_width="@dimen/smallIcon"
+            android:layout_height="@dimen/smallIcon"
+            android:src="@drawable/ic_movie" />
+
+        <TextView
+            android:id="@+id/videoName"
+            style="@style/PrimaryText.ListItemVideoName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text="Hello worldasd asdf as dfsdf sadf sdf sadf sdf sdf asd fsadf sd fasdf " />
+
+        <TextView
+            android:id="@+id/movieType"
+            style="@style/SecondaryText.ListItemMovieType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Trailer" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="#dddddd" />
+</FrameLayout>

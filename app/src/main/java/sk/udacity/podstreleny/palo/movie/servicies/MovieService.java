@@ -2,7 +2,6 @@ package sk.udacity.podstreleny.palo.movie.servicies;
 
 import android.arch.lifecycle.LiveData;
 
-import retrofit2.Call;
 import retrofit2.http.GET;
 import sk.udacity.podstreleny.palo.movie.ApiKey;
 import sk.udacity.podstreleny.palo.movie.model.MovieList;

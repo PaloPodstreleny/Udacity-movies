@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="smallProgressBar">24dp</dimen>
     <dimen name="progressBar">48dp</dimen>
+    <dimen name="smallIcon">24dp</dimen>
+    <dimen name="smallTextMargin">8dp</dimen>
+    <dimen name="mediumTextMargin">16sp</dimen>
+    <dimen name="mediumIcon">36dp</dimen>
+    <dimen name="image_width_detail">100dp</dimen>
 </resources>

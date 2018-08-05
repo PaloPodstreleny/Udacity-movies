@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentReview"
     android:layout_height="wrap_content"
-    android:background="@color/colorWhite"
-    android:paddingTop="16dp"
+    android:layout_width="match_parent"
+    style="@style/Clickable.ClickableVideoListItem"
     >
 
     <ImageView
         android:id="@+id/authorIcons"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_width="@dimen/smallIcon"
+        android:layout_height="@dimen/smallIcon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:src="@drawable/ic_author"
@@ -21,41 +20,35 @@
 
     <TextView
         android:id="@+id/author"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toRightOf="@id/authorIcons"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="16sp"
-        android:textStyle="bold|italic"
-        tools:text="Hello world"
+        app:layout_constraintTop_toTopOf="@id/authorIcons"
+        app:layout_constraintBottom_toBottomOf="@id/authorIcons"
+        style="@style/SecondaryText.ListItemReviewAuthor"
+        tools:text="Paviel Pavielovic"
         />
 
     <TextView
         android:id="@+id/review"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
+        style="@style/PrimaryText.ListItemReviewText"
+        android:maxLines="3"
+        android:ellipsize="end"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/author"
+        app:layout_constraintTop_toBottomOf="@+id/authorIcons"
         app:layout_constraintRight_toRightOf="parent"
-        android:textSize="16sp"
+        tools:text="This is a quite amazing review! It's true"
         />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorHorizontalLineGrey"
-        android:layout_marginTop="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+    <Button
+        android:id="@+id/read_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_read_more"
+        android:theme="@style/GreenButton"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/review"
-
-        />
-
+        app:layout_constraintTop_toBottomOf="@id/review"/>
 
 </android.support.constraint.ConstraintLayout>
